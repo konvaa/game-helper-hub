@@ -1,8 +1,12 @@
-﻿import json
+import json
 from pathlib import Path
 
-skills_p = Path(r".\data\diablo2\resurrected\helpers\generated\skills_raw.json")
-desc_p   = Path(r".\data\diablo2\resurrected\helpers\generated\skilldesc_raw.json")
+# scripts/tools/dump_skilldesc_rs.py -> project root is two levels up
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+GENERATED_DIR = PROJECT_ROOT / "data" / "diablo2" / "resurrected" / "helpers" / "generated"
+
+skills_p = GENERATED_DIR / "skills_raw.json"
+desc_p = GENERATED_DIR / "skilldesc_raw.json"
 
 skills = json.loads(skills_p.read_text(encoding="utf-8"))
 desc   = json.loads(desc_p.read_text(encoding="utf-8"))

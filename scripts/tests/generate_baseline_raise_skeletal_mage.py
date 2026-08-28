@@ -16,10 +16,10 @@ def run_cli(
     difficulty: str,
 ) -> Dict[str, Any]:
     """
-    Calls Scripts/summon_cli.py and returns parsed JSON.
+    Calls scripts/summon_cli.py and returns parsed JSON.
     Uses subprocess to avoid import/path issues.
     """
-    cli_path = project_root / "Scripts" / "summon_cli.py"
+    cli_path = project_root / "scripts" / "summon_cli.py"
     if not cli_path.exists():
         raise FileNotFoundError(f"Cannot find summon_cli.py at: {cli_path}")
 
@@ -109,12 +109,12 @@ def main() -> int:
     ap.add_argument("--generated-dir", required=True, help="Path to generated dataset dir")
     ap.add_argument(
         "--cases",
-        default=str(Path("Scripts/tests/cases_raise_skeletal_mage.json")),
+        default=str(Path("scripts/tests/cases_raise_skeletal_mage.json")),
         help="Path to cases JSON",
     )
     ap.add_argument(
         "--out",
-        default=str(Path("Scripts/tests/baseline_raise_skeletal_mage.json")),
+        default=str(Path("scripts/tests/baseline_raise_skeletal_mage.json")),
         help="Where to write baseline JSON",
     )
     args = ap.parse_args()

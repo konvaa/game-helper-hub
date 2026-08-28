@@ -17,3 +17,11 @@ dist/
 
 # Secrets
 .env
+
+# Flutter / Dart / Android build artifacts
+.dart_tool/
+.gradle/
+mobile_app/build/
+
+# Pytest cache
+.pytest_cache/

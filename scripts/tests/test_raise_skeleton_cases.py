@@ -8,12 +8,12 @@ from typing import Any, Dict, Optional
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-CASES_PATH = PROJECT_ROOT / "Scripts" / "tests" / "cases_raise_skeleton.json"
-BASELINE_PATH = PROJECT_ROOT / "Scripts" / "tests" / "baseline_raise_skeleton.json"
+CASES_PATH = PROJECT_ROOT / "scripts" / "tests" / "cases_raise_skeleton.json"
+BASELINE_PATH = PROJECT_ROOT / "scripts" / "tests" / "baseline_raise_skeleton.json"
 
 
 def run_cli(generated_dir: str, rs: int, sm: int, difficulty: str) -> Dict[str, Any]:
-    cli_path = PROJECT_ROOT / "Scripts" / "summon_cli.py"
+    cli_path = PROJECT_ROOT / "scripts" / "summon_cli.py"
     cmd = [
         sys.executable,
         str(cli_path),
@@ -81,7 +81,7 @@ def test_baseline_file_exists():
     assert BASELINE_PATH.exists(), (
         f"Missing baseline file: {BASELINE_PATH}\n"
         f"Generate it with:\n"
-        f"  python .\\Scripts\\tests\\generate_baseline_raise_skeleton.py --generated-dir "
+        f"  python .\\scripts\\tests\\generate_baseline_raise_skeleton.py --generated-dir "
         f"\".\\data\\diablo2\\resurrected\\helpers\\generated\""
     )
 

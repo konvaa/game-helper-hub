@@ -1,0 +1,19 @@
+# Vynucení LF pro textové soubory.
+#
+# Důvod: vygenerovaný dataset v data/.../generated/ vzniká spuštěním
+# scripts/rebuild_dataset.py, a Python zapisuje konce řádků podle toho, na
+# jakém OS skript běží (Windows CRLF vs. Linux/macOS LF). Bez tohoto
+# nastavení vypadá každé přegenerování na jiném stroji jako přepsání všech
+# ~9,8 MB dat, i když se obsahově změnilo pár set řádků.
+#
+# Syrové exporty z hry jsou z normalizace vyjmuté – viz pravidlo pro
+# raw_sources/ na konci souboru.
+
+*.json text eol=lf
+*.py   text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+
+# Výjimka: syrové exporty se drží byte-přesně tak, jak je dodává hra.
+# Herní .txt z data/global/excel mají CRLF a nemají se normalizovat.
+raw_sources/** -text

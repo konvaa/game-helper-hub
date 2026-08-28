@@ -1,0 +1,80 @@
+{
+    "meta": {
+      "schema": "summon_ui_registry.v1",
+      "notes": "UI registry for summon calculators. Drives inputs, overrides, output layout."
+    },
+    "sections": [
+      {
+        "id": "skill_summons",
+        "title": "Skill summons",
+        "premium": false,
+        "items": [
+          {
+            "skill_key": "raise_skeleton",
+            "title": "Raise Skeleton",
+            "inputs": {
+              "difficulty": true,
+              "slvl": true,
+              "blvl": true
+            },
+            "overrides": [
+              { "skill_key": "skeleton_mastery", "title": "Skeleton Mastery", "total": true, "base": true }
+            ],
+            "outputs": [
+              "count",
+              "damage_physical",
+              "attack_rating",
+              "defense",
+              "hp"
+            ]
+          },
+          {
+            "skill_key": "raise_skeletal_mage",
+            "title": "Raise Skeletal Mage",
+            "inputs": {
+              "difficulty": true,
+              "slvl": true,
+              "blvl": true
+            },
+            "overrides": [
+              { "skill_key": "skeleton_mastery", "title": "Skeleton Mastery", "total": true, "base": true }              
+            ],
+            "outputs": [
+              "count",
+              "damage_elemental",
+              "damage_physical",
+              "attack_rating",
+              "defense",
+              "hp"
+            ]
+          },
+          {
+            "skill_key": "clay_golem",
+            "title": "Clay Golem",
+            "inputs": {
+              "difficulty": true,
+              "slvl": true,
+              "blvl": true
+            },
+            "overrides": [
+              { "skill_key": "golem_mastery", "title": "Golem Mastery", "total": true, "base": true }
+            ],
+            "outputs": [
+              "damage_physical",
+              "attack_rating",
+              "defense",
+              "hp"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gear_summons",
+        "title": "From gear",
+        "premium": true,
+        "feature_flag": "enabledSummonsFromGear",
+        "items": []
+      }
+    ]
+  }
+  

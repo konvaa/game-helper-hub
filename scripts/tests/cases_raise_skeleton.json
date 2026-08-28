@@ -1,0 +1,18 @@
+{
+    "meta": {
+      "schema": "summon_cases.v1",
+      "skill": "raise_skeleton",
+      "notes": "User-defined RS/SM level pairs. Baseline values are generated from current engine output."
+    },
+    "cases": [
+      { "id": "rs05_sm05", "rs": 5,  "sm": 5,  "difficulty": "hell" },
+      { "id": "rs07_sm06", "rs": 7,  "sm": 6,  "difficulty": "hell" },
+      { "id": "rs20_sm11", "rs": 20, "sm": 11, "difficulty": "hell" },
+      { "id": "rs22_sm20", "rs": 22, "sm": 20, "difficulty": "hell" },
+      { "id": "rs09_sm20", "rs": 9,  "sm": 20, "difficulty": "hell" },
+      { "id": "rs30_sm31", "rs": 30, "sm": 31, "difficulty": "hell" },
+      { "id": "rs37_sm33", "rs": 37, "sm": 33, "difficulty": "hell" },
+      { "id": "rs41_sm39", "rs": 41, "sm": 39, "difficulty": "hell" }
+    ]
+  }
+  

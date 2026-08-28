@@ -1,0 +1,36 @@
+{
+    "schema": "ghh.catalog.v1",
+    "games": [
+      {
+        "id": "diablo2",
+        "title": "Diablo II",
+        "variants": [
+          {
+            "id": "d2r_vanilla",
+            "title": "Diablo II: Resurrected — Vanilla",
+            "modules": [
+              { "id": "summons", "title": "Summon Calculator", "enabled": true },
+              { "id": "runewords", "title": "Runewords Database", "enabled": false },
+              { "id": "crafting", "title": "Crafting & Recipes", "enabled": false },
+              { "id": "bestiary", "title": "Bestiary", "enabled": false },
+              { "id": "diffs", "title": "Version Differences", "enabled": false }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "baldurs_gate",
+        "title": "Baldur’s Gate",
+        "variants": [
+          {
+            "id": "bg_placeholder",
+            "title": "Placeholder",
+            "modules": [
+              { "id": "coming_soon", "title": "Coming soon", "enabled": false }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

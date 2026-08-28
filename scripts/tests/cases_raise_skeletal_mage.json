@@ -1,0 +1,22 @@
+{
+    "meta": {
+      "schema": "summon_cases.v1",
+      "skill": "raise_skeletal_mage",
+      "notes": "User-defined RSM/SM level pairs. Baseline values are generated from current engine output."
+    },
+    "cases": [
+      { "id": "rsm01_sm01_hell", "rsm": 1,  "sm": 1,  "difficulty": "hell" },
+      { "id": "rsm03_sm05_hell", "rsm": 3,  "sm": 5,  "difficulty": "hell" },
+      { "id": "rsm05_sm05_hell", "rsm": 5,  "sm": 5,  "difficulty": "hell" },
+  
+      { "id": "rsm15_sm20_hell", "rsm": 15, "sm": 20, "difficulty": "hell" },
+      { "id": "rsm20_sm20_hell", "rsm": 20, "sm": 20, "difficulty": "hell" },
+  
+      { "id": "rsm26_sm30_hell", "rsm": 26, "sm": 30, "difficulty": "hell" },
+      { "id": "rsm30_sm30_hell", "rsm": 30, "sm": 30, "difficulty": "hell" },
+  
+      { "id": "rsm26_sm30_nm",   "rsm": 26, "sm": 30, "difficulty": "nightmare" },
+      { "id": "rsm26_sm30_norm", "rsm": 26, "sm": 30, "difficulty": "normal" }
+    ]
+  }
+  

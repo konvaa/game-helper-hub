@@ -1,0 +1,70 @@
+mobile_app/
+├─ pubspec.yaml
+├─ assets/
+   └─ catalog.json                           #! outdated katalog asi, odkazuje se na bestiáře, RWW atd.
+│  ├─ games/
+│  │  └─ diablo2/
+│  │     └─ resurrected_vanilla/
+│  │        └─ dataset.json                  # zatím placeholder
+│  └─ registry/
+│     └─ summon_ui_registry.json             #! Základ podrobnějšího registru, zatím jen pro některé necro summons
+
+└─ lib/
+   ├─ main.dart                              # spouští appku, home = SummonListScreen
+   │
+   ├─ screens/
+   │  ├─ summon_list_screen.dart             # seznam kalkulaček + dropdown "Variant"
+   │  └─ summon_calc_screen.dart             # kalkulačka se SLVL/BLVL + overrides + Compute
+   │  ├─ games_screen.dart                   #! tady by asi měl volit uživatel hru
+   │  └─ modules_screen.dart                 #! asi podvolba jednotlivé hry na základě dat
+      └─ variants_screen.dart                #! asi další z voleb 
+   ├─ services/
+   │  ├─ feature_flags.dart                  # gating (Premium locked sekce apod.)
+   │  ├─ registry_loader.dart                # načítá assets/registry (UI seznamy/sekce)
+   │  └─ game_engine_manager.dart            # výběr varianty + drží lokální engine
+      └─ catalog_service.dart                #! importuje catalog_models.dart asi taky prvotní pokus něčeho.
+      └─ engine_client.dart                  #! asi separátní a prvotní řešení nějakého summon enginu?
+   │
+   ├─ models/
+   │  ├─ catalog_models.dart                 # (pokud tam ještě je) modely pro game/variant/module list UI
+   │  └─ summon_ui_registry.dart             # datové třídy pro UI registry (sekce, item, overrides)
+   │
+   ├─ core/                                  # NOVĚ – engine vrstva (společná pro hry/varianty)
+   │  ├─ dataset/
+   │  │  └─ dataset.dart                     # loader + lookup skills/monsters (+ placeholder guard)
+   │  ├─ expr/
+   │  │  ├─ tokenizer.dart
+   │  │  ├─ parser.dart
+   │  │  ├─ ast.dart
+   │  │  └─ eval.dart                        # evaluátor D2 calc výrazů (MVP)
+   │  └─ engine/
+   │     ├─ engine_input.dart
+   │     ├─ engine_result.dart
+   │     ├─ engine_runner.dart
+   │     └─ local_game_engine.dart
+   │     └─ BAK_game_engine_manager.dart         #! asi stará verze, totožný soubor se řeší jinde, označena dočasně
+   │
+   └─ games/                                 # NOVĚ – hra/varianta (B varianta struktury)
+      └─ diablo2/
+         └─ variants/
+            └─ resurrected_vanilla/
+               ├─ dataset/
+               │  └─ d2r_vanilla_dataset_loader.dart   # (pokud jsi ho vytvořil)
+               ├─ registry/
+               │  └─ necro_registry.dart               # map skillKey -> model
+               └─ modules/
+                  └─ necro/
+                     └─ summons/
+                        ├─ clay_golem_model.dart
+                        ├─ raise_skeleton_model.dart
+                        └─ raise_skeletal_mage_model.dart
+
+Další soubory a složky
+
+    lib/modules/summons/
+    ├─ summons_home_screen.dart              #! tebou označeno jako outdated.
+    ├─ summons_registry.dart                 #! tebou označeno jako outdated.
+    └─ clay_golem_screen.dart                #! tebou označeno jako outdated.
+
+    lib/routing
+    ├─ module_routes,dart                    #! asi outdated.

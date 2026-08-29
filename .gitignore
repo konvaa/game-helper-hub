@@ -15,6 +15,13 @@ __pycache__/
 build/
 dist/
 
+# Java / Maven
+target/
+*.iml
+
+# JVM crash dumpy (např. z IntelliJ git helperu při nedostatku paměti)
+hs_err_pid*.log
+
 # Secrets
 .env
 

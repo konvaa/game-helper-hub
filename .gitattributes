@@ -17,3 +17,14 @@
 # Výjimka: syrové exporty se drží byte-přesně tak, jak je dodává hra.
 # Herní .txt z data/global/excel mají CRLF a nemají se normalizovat.
 raw_sources/** -text
+
+# --- Java backend (backend/) ---
+# Pravidla jsou schválně omezená na backend/. Globální "*.xml text eol=lf" by
+# zasáhlo i mobile_app/ (Flutter, Android), kde jsou soubory v indexu s CRLF,
+# a git by je označil všechny jako změněné.
+backend/**       text=auto eol=lf
+
+# Maven Wrapper: mvnw je shell skript (LF), mvnw.cmd je dávkový soubor pro
+# Windows a MUSÍ mít CRLF, jinak ho cmd.exe neumí spustit.
+backend/mvnw     text eol=lf
+backend/mvnw.cmd text eol=crlf

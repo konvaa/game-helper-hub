@@ -8,6 +8,22 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
+# Hard pointy jsou v D2 omezene sloupcem maxlvl v skills.txt (= 20 pro vsechny
+# necro summon skilly). Efektivni uroven nad 20 pochazi z +skills na itemech,
+# ktere zadne hard pointy nepridavaji. Baseline pripady proto deklaruji base
+# uroven zastropovanou na 20, ne rovnou efektivni urovni.
+#
+# Na soucasne vysledky to nema vliv - modely Raise Skeleton ani Skeletal Mage
+# hodnotu blvl nectou. Zacne na tom zaviset az synergie (viz
+# docs/SKILLS_PROJECTION.md sekce 5), ktere se pocitaji prave z hard pointu.
+HARD_POINT_CAP = 20
+
+
+def base_level(effective_level: int) -> int:
+    """Base (hard-point) uroven odpovidajici dane efektivni urovni."""
+    return min(int(effective_level), HARD_POINT_CAP)
+
+
 def run_cli(
     project_root: Path,
     generated_dir: str,
@@ -33,13 +49,13 @@ def run_cli(
         "--slvl",
         str(rs),
         "--blvl",
-        str(rs),
+        str(base_level(rs)),
         "--difficulty",
         str(difficulty),
         "--set",
         f"skeleton_mastery.lvl={sm}",
         "--set",
-        f"skeleton_mastery.blvl={sm}",
+        f"skeleton_mastery.blvl={base_level(sm)}",
         "--json",
     ]
 

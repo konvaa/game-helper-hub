@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+      Spring Boot "starter parent" jako rodičovský POM.
+
+      Co tím získáváme: v <parent> je obří <dependencyManagement> sekce, která
+      pro stovky knihoven předepisuje verze, jež spolu prokazatelně fungují.
+      Proto níž u závislostí NENÍ žádné <version> - dědí se odtud. Je to
+      nejdůležitější důvod, proč se Spring Boot projekty nerozpadají na
+      konfliktech verzí (v Pythonu bys řešil totéž pinováním v requirements.txt,
+      jen bez záruky, že ta kombinace byla někým otestovaná).
+
+      <relativePath/> (prázdné) říká: rodiče NEHLEDEJ v ../pom.xml, ber ho
+      z repozitáře. Bez toho by Maven nejdřív koukal do kořene Game Helperu,
+      kde žádný pom.xml není, a vypsal by varování.
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.16</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>cz.libor</groupId>
+    <artifactId>game-helper-api</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>game-helper-api</name>
+    <description>REST API nad daty Diablo II: Resurrected - výpočet statů summonů</description>
+
+    <properties>
+        <!--
+          Přepisuje property z rodiče. Ovlivní zdrojovou i cílovou verzi
+          kompilátoru (maven.compiler.release), takže javac odmítne přeložit
+          kód, který používá novější API než 21.
+        -->
+        <java.version>21</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!--
+          "Starter" = balík závislostí, ne knihovna. spring-boot-starter-web
+          přitáhne Spring MVC, vestavěný Tomcat, Jackson (JSON) a validaci
+          konfigurace. Přítomnost startovacího balíku na classpath je zároveň
+          signál pro autokonfiguraci - Boot podle toho, co na classpath NAJDE,
+          rozhodne, co nastartuje. Tohle je jádro celé "magie" Spring Bootu:
+          není to reflexe nad tvým kódem, je to podmíněná konfigurace
+          (@ConditionalOnClass) reagující na obsah classpath.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Hibernate + Spring Data JPA + HikariCP (connection pool) + správa transakcí. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Jakarta Bean Validation (@Valid, @Min, @NotNull) - použijeme v kroku 5 na compute request. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!--
+          Flyway od verze 10 rozdělil podporu databází do samostatných modulů.
+          Samotné flyway-core Postgres NEUMÍ - bez flyway-database-postgresql
+          aplikace spadne při startu na "Unsupported Database: PostgreSQL".
+          Častý zdroj zmatku při upgradu ze starších návodů.
+        -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+
+        <!--
+          <scope>runtime</scope>: driver je potřeba při běhu, ale ne při
+          překladu - v kódu se na třídu org.postgresql.Driver nikde neodkazuješ,
+          načte ji JDBC podle URL. Scope drží driver mimo compile classpath,
+          takže na něm omylem nemůžeš postavit kód.
+        -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- JUnit 5, AssertJ, Mockito, MockMvc, JSONassert. Jen pro testy. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+              Balí aplikaci do "fat jar" (executable jar) se vším, co potřebuje
+              k běhu, včetně vestavěného Tomcatu. Díky tomu je nasazení
+              "java -jar app.jar" - žádný aplikační server, do kterého se něco
+              deployuje. Tenhle plugin taky poskytuje cíl spring-boot:run.
+            -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

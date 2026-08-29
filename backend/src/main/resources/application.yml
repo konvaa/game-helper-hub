@@ -1,0 +1,71 @@
+# Konfigurace aplikace.
+#
+# Hodnoty ve tvaru ${PROMENNA:vychozi} berou přednostně proměnnou prostředí
+# a jinak použijí výchozí hodnotu za dvojtečkou. Díky tomu tenhle jediný
+# soubor obslouží obojí: lokální spuštění z IntelliJ (výchozí hodnoty míří na
+# localhost) i běh v Dockeru (compose nastaví proměnné a přepíše je).
+#
+# Proč ne dva soubory (application-local.yml / application-docker.yml):
+# rozdíl jsou tři hodnoty. Profily se vyplatí, až se liší chování, ne adresa.
+
+spring:
+  application:
+    name: game-helper-api
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/gamehelper}
+    username: ${SPRING_DATASOURCE_USERNAME:gamehelper}
+    password: ${SPRING_DATASOURCE_PASSWORD:gamehelper}
+
+  flyway:
+    enabled: true
+    # Výchozí umístění migrací. Uvádím explicitně, ať je v konfiguraci vidět,
+    # kde se ty SQL soubory berou.
+    locations: classpath:db/migration
+
+  jpa:
+    hibernate:
+      # KLÍČOVÉ ROZHODNUTÍ (viz docs/PLAN_P1_SPRING_SLICE.md, 4.1).
+      #
+      # validate = Hibernate schéma NEVYTVÁŘÍ ani NEMĚNÍ, jen při startu ověří,
+      # že entity odpovídají tomu, co v databázi opravdu je. Když se rozejdou
+      # (chybí sloupec, jiný typ), aplikace vůbec nenastartuje.
+      #
+      # Schéma vlastní Flyway (verzované SQL v db/migration), Hibernate hlídá
+      # shodu. Opak - ddl-auto: update - nechá schéma vygenerovat Hibernate,
+      # což je nedeterministické, neumí ALTER/DROP, neumí CHECK omezení ani
+      # datové migrace, a hlavně: schéma pak není v gitu, je to vedlejší efekt.
+      ddl-auto: validate
+
+    # Vypíná Open Session In View. Ve výchozím stavu (true) drží Spring
+    # persistence context otevřený po celou dobu zpracování requestu, včetně
+    # serializace odpovědi. Zní to pohodlně, ale:
+    #   - drží databázové spojení déle, než je potřeba,
+    #   - a hlavně to MASKUJE chyby: lazy kolekce se doserializuje z Jacksona,
+    #     takže se místo LazyInitializationException tiše vystřelí N+1 dotazů.
+    # S false se ta chyba projeví hned a nutí to psát dotazy vědomě. Spring
+    # sám při zapnutém OSIV loguje varování - je to spíš historická výchozí
+    # hodnota než doporučení.
+    open-in-view: false
+
+    properties:
+      hibernate:
+        # Formátovaný SQL log při ladění (viz logging níž).
+        format_sql: true
+        jdbc:
+          # Velikost dávky pro hromadné zápisy přes Hibernate.
+          # Pozor: importer v kroku 3 stejně půjde přes JdbcTemplate.batchUpdate,
+          # protože identity klíč (GenerationType.IDENTITY) dávkování v Hibernate
+          # znemožňuje - Hibernate musí po každém insertu získat vygenerované ID.
+          batch_size: 100
+
+server:
+  port: 8080
+
+logging:
+  level:
+    # Odkomentuj při ladění dotazů - vypíše generované SQL.
+    # org.hibernate.SQL: DEBUG
+    # A tohle k tomu dopíše hodnoty parametrů místo otazníků:
+    # org.hibernate.orm.jdbc.bind: TRACE
+    org.flywaydb: INFO

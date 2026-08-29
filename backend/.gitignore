@@ -1,0 +1,8 @@
+# Maven build
+target/
+
+# IntelliJ (modulové soubory; .idea/ je ignorované už v kořenovém .gitignore)
+*.iml
+
+# Maven Wrapper si stahuje distribuci Mavenu sem
+.mvn/wrapper/maven-wrapper.jar

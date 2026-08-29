@@ -1,0 +1,37 @@
+# Lokální PostgreSQL pro vývoj.
+#
+# V kroku 1 je tu jenom databáze - aplikaci pouštíš z IntelliJ nebo přes
+# mvnw spring-boot:run. Služba "api" (build z Dockerfile) přibude v kroku 7,
+# aby akceptační kritérium "docker compose up -> běží API i databáze" platilo.
+#
+# Klíč "version:" se dneska neuvádí - Compose V2 ho ignoruje a varuje.
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: gamehelper-db
+    environment:
+      POSTGRES_DB: gamehelper
+      POSTGRES_USER: gamehelper
+      POSTGRES_PASSWORD: gamehelper
+    ports:
+      # Mapování na hostitele, aby se šlo připojit z IntelliJ (Database tool
+      # window) a aby aplikace běžící mimo Docker viděla databázi na localhostu.
+      - "5432:5432"
+    volumes:
+      # Pojmenovaný volume: data přežijí "docker compose down".
+      # Zahodit je (a nechat migrace proběhnout od nuly) jde přes:
+      #     docker compose down -v
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # Kontejner hlásí "started" hned, jak se spustí proces - ale Postgres
+      # v tu chvíli ještě nepřijímá spojení. Bez healthchecku by služba "api"
+      # v kroku 7 startovala dřív než databáze a padala na connection refused.
+      # depends_on: condition: service_healthy se opírá právě o tohle.
+      test: [ "CMD-SHELL", "pg_isready -U gamehelper -d gamehelper" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "schema": "summon_cases.v1",
+    "skill": "raise_skeletal_mage",
+    "notes": "Doplnkova sada pro vysoke efektivni urovne. Stavajici RSM sada koncila na lvl 30; tato jde po hranici segmentu 28/29 a do pasma 35-45. POZOR: hodnoty jsou vystup soucasneho enginu, NEJSOU overene proti hre - viz docs/KNOWN_ACCURACY_GAPS.md."
+  },
+  "cases": [
+    { "id": "rsm28_sm28_hell", "rsm": 28, "sm": 28, "difficulty": "hell" },
+    { "id": "rsm29_sm29_hell", "rsm": 29, "sm": 29, "difficulty": "hell" },
+    { "id": "rsm35_sm35_hell", "rsm": 35, "sm": 35, "difficulty": "hell" },
+    { "id": "rsm40_sm40_hell", "rsm": 40, "sm": 40, "difficulty": "hell" },
+    { "id": "rsm45_sm20_hell", "rsm": 45, "sm": 20, "difficulty": "hell" },
+    { "id": "rsm40_sm00_hell", "rsm": 40, "sm": 0,  "difficulty": "hell" },
+    { "id": "rsm40_sm40_nm",   "rsm": 40, "sm": 40, "difficulty": "nightmare" },
+    { "id": "rsm40_sm40_norm", "rsm": 40, "sm": 40, "difficulty": "normal" }
+  ]
+}

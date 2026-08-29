@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "schema": "summon_cases.v1",
+    "skill": "raise_skeleton",
+    "notes": "Doplnkova sada pro vysoke efektivni urovne. Cili na: segment 4 (23-28), ktery ve stavajici sade uplne chybel; hranice segmentu 28/29; hlubsi pasmo 5. segmentu (35-45); izolacni pripady (mastery=0, mastery na hard capu); a obtiznosti nightmare/normal, ktere stavajici RS sada vubec nemela. POZOR: hodnoty jsou vystup soucasneho enginu, NEJSOU overene proti hre - viz docs/KNOWN_ACCURACY_GAPS.md."
+  },
+  "cases": [
+    { "id": "rs23_sm20_hell",  "rs": 23, "sm": 20, "difficulty": "hell" },
+    { "id": "rs25_sm25_hell",  "rs": 25, "sm": 25, "difficulty": "hell" },
+    { "id": "rs28_sm28_hell",  "rs": 28, "sm": 28, "difficulty": "hell" },
+    { "id": "rs29_sm29_hell",  "rs": 29, "sm": 29, "difficulty": "hell" },
+    { "id": "rs35_sm35_hell",  "rs": 35, "sm": 35, "difficulty": "hell" },
+    { "id": "rs40_sm40_hell",  "rs": 40, "sm": 40, "difficulty": "hell" },
+    { "id": "rs45_sm20_hell",  "rs": 45, "sm": 20, "difficulty": "hell" },
+    { "id": "rs20_sm40_hell",  "rs": 20, "sm": 40, "difficulty": "hell" },
+    { "id": "rs40_sm00_hell",  "rs": 40, "sm": 0,  "difficulty": "hell" },
+    { "id": "rs35_sm35_nm",    "rs": 35, "sm": 35, "difficulty": "nightmare" },
+    { "id": "rs35_sm35_norm",  "rs": 35, "sm": 35, "difficulty": "normal" }
+  ]
+}

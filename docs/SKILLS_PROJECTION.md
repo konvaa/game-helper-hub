@@ -173,7 +173,7 @@ tom záleží: Clay Golem `aurastatcalc1 = dm34` (slow %) a
 Baseline testy tohle nepokrývají — 17 ověřených případů je jen pro Raise
 Skeleton a Skeletal Mage, které `dm` nepoužívají. **Clay Golem nemá ani jeden
 golden test.** Evidováno v [`KNOWN_ACCURACY_GAPS.md`](KNOWN_ACCURACY_GAPS.md),
-bod 2. Než se na golemy postaví DB vrstva, měla by se `dm` křivka ověřit
+bod 1 (problém A). Než se na golemy postaví DB vrstva, měla by se ověřit
 proti hře na vysokých úrovních; jinak se do schématu zabetonuje neověřená
 aproximace. Není to blocker pro projekci sloupců, ale je to blocker pro
 důvěru ve výsledky u golemů.
@@ -260,8 +260,17 @@ skill_param(skill_id, idx SMALLINT, value INTEGER, description TEXT)
 --   Není to herní data, ale pro UI a ladění je to zlato.
 
 -- calc1..calc10, aurastatcalc1..6, passivecalc1..14, sumsk1..5calc, petmax
-skill_calc(skill_id, slot TEXT, expr TEXT)
+skill_calc(calc_id PK, skill_id, slot TEXT, expr TEXT)
 --   slot = 'calc1' | 'aurastatcalc1' | 'passivecalc3' | ...
+
+-- Odkazy na jine skilly, vytazene z vyrazu. Jeden vyraz jich muze mit vic
+-- a KAZDY muze cist jinou uroven - viz sekce 5.2. Proto samostatna tabulka,
+-- ne sloupec na skill_calc a uz vubec ne priznak na skill.
+skill_calc_ref(calc_id FK, target_skill TEXT, token TEXT, level_mode TEXT)
+--   token      = 'blvl' | 'lvl' | 'ln12' | 'dm34' | 'par8' | ...
+--   level_mode = 'base'      pro .blvl
+--              | 'effective' pro .lvl, .lnAB, .dmAB
+--              | 'none'      pro .parN (parametr bez urovne)
 
 -- passivestat1..14, aurastat1..6, sumskill1..5
 skill_stat_ref(skill_id, kind TEXT, idx SMALLINT, stat TEXT)
@@ -399,48 +408,87 @@ doložit, a rozhodnutí, která z toho plynou.
 
 ### 5.1 D2 skutečně rozlišuje base a efektivní úroveň — doloženo daty
 
-Není to teoretická otázka. `skills.txt` má dva různé tokeny a **používá je
-záměrně různě** **[data]**:
+Není to teoretická otázka. `skills.txt` má pro odkaz na úroveň **jiného**
+skillu čtyři různé zápisy a používá je záměrně různě **[data]**:
 
-| token | význam | výskytů v datasetu |
+| zápis | režim | výskytů |
 |---|---|---|
 | `skill('X'.blvl)` | **base** — jen investované body (0–20) | **352** |
-| `skill('X'.lvl)` | **efektivní** — včetně `+skills` z itemů | 220 |
+| `skill('X'.lnAB)` | efektivní (přes `ln` token cílového skillu) | 28 |
+| `skill('X'.lvl)` | efektivní — včetně `+skills` z itemů | 20 |
+| `skill('X'.dmAB)` | efektivní (přes `dm` token cílového skillu) | 13 |
+| `skill('X'.parN)` | úroveň nenese vůbec (jen parametr) | 26 |
 
-`blvl` je tedy **častější než `lvl`**. Rozložení podle sloupců ukazuje jasný
-vzorec:
+Celkem **413 odkazů nesoucích úroveň** na **138 různých cílových skillů**.
+Mezi odkazy na cizí skilly tedy base režim výrazně převažuje (352 z 413).
+
+> **Pozor na záměnu.** Vedle toho je v datech ještě **220 výskytů holého
+> tokenu `lvl`** bez `skill()` — to je ale úroveň *vlastního* skillu, ne
+> odkaz na cizí. Ta je vždy efektivní. Dřívější verze tohoto dokumentu ta
+> dvě čísla zaměňovala a uváděla 220 jako počet `skill('X'.lvl)` odkazů.
+
+Rozložení base odkazů podle sloupců:
 
 | sloupec | `blvl` | co to je |
 |---|---|---|
-| `EDmgSymPerCalc` | 159× | **synergie** |
+| `EDmgSymPerCalc` | 159× | synergie (elementální) |
 | `calc1` | 43× | různé |
-| `DmgSymPerCalc` | 29× | fyzická obdoba synergií |
-| `auralencalc` | 18× | délka aury |
+| `DmgSymPerCalc` | 29× | synergie (fyzická) |
 | `sumsk1..5calc` | 21× | úrovně skillů dané petovi |
+| `auralencalc` | 18× | délka aury |
 | `petmax` | 6× | počet petů |
 
-### 5.2 Pravidlo, které z toho plyne
+Rozložení **není** vzorec, ze kterého by šlo režim odvodit — viz 5.2.
 
-**Synergie se počítají z hard pointů, mastery z efektivní úrovně.**
-Doloženo na našich vlastních skillech **[data]**:
+### 5.2 Žádné pravidlo neexistuje — režim je vlastnost odkazu
+
+> **Oprava.** Dřívější verze této sekce tvrdila pravidlo „synergie z hard
+> pointů, mastery z efektivní úrovně". Analýza všech 429 skillů to vyvrací.
+> Je to převažující případ, ne zákonitost.
+
+Napříč `skills_raw` je **413 odkazů nesoucích úroveň** na **138 cílových
+skillů** **[data]**. Tři nezávislé důkazy, že režim nejde odvodit ani ze
+skillu, ani ze sloupce:
+
+**a) Sedm cílových skillů je čtených oběma způsoby** — `Blood Oath`,
+`Demonic Mastery`, `Engorge`, `Sigil Death`, `Summon Fenris`, `Summon Grizzly`,
+`Summon Spirit Wolf`:
 
 ```
-Clay Golem.calc1 =
-  (100+(par1*(lvl-1))) * (100 + skill('Golem Mastery'.ln12)
-                              + (skill('BloodGolem'.blvl) * skill('BloodGolem'.par8)))/100-100
-                                             ^^^^                    ^^^^
-              Golem Mastery přes ln12 (efektivní)     Blood Golem synergie přes blvl (hard points)
+Raven.DmgSymPerCalc         -> skill('Summon Grizzly'.blvl)   BASE
+Summon Fenris.passivecalc3  -> skill('Summon Grizzly'.ln12)   EFEKTIVNÍ
 ```
 
+**b) Dvanáct sloupců nese oba režimy** napříč skilly — `calc1`, `calc2`,
+`passivecalc1..3`, `aurastatcalc1..4`, `auralencalc`, `sumsk1calc`,
+`EDmgSymPerCalc`.
+
+**c) Jeden výraz může nést oba režimy najednou.** Clay Golem `calc1`:
+
 ```
-Raise Skeleton.passivecalc1 =
-  skill('Skeleton Mastery'.lvl) * skill('Skeleton Mastery'.par1) * 256
-                          ^^^  mastery -> efektivní úroveň
+(100+(par1*(lvl-1))) * (100 + skill('Golem Mastery'.ln12)
+                            + (skill('BloodGolem'.blvl) * skill('BloodGolem'.par8)))/100-100
+                                     ^^^^ EFEKTIVNÍ            ^^^^ BASE
 ```
 
-Tenhle rozdíl **není kosmetický**. Hráč s 20 body do Blood Golema a +15 ze
-itemů má pro synergii pořád jen 20, ale pro mastery 35. U cílového scénáře
-(35–40+) je to rozdíl v desítkách procent.
+Ani per-výraz příznak nestačí. **Režim je vlastnost každého jednotlivého
+odkazu uvnitř výrazu.**
+
+I dedikovaný synergie sloupec má výjimku: `EDmgSymPerCalc` má 159 odkazů přes
+`.blvl`, ale `Summon Spirit Wolf.EDmgSymPerCalc = skill('Summon Grizzly'.ln12)`
+počítá synergii z **efektivní** úrovně.
+
+Zúžené tvrzení, které držet lze: Skeleton Mastery (9×) a Golem Mastery (12×)
+jsou čtené **výhradně** efektivně. Demonic Mastery ne — má 13× efektivní a 7×
+base (v `petmax` a `passivecalc2`), a ty base výjimky přinesl až D2R 3.3.
+
+**Pro necro summony je stav čistý:** skeletoní větev čte Skeleton Mastery vždy
+přes `.lvl`, golemové čtou Golem Mastery přes `ln`/`dm` a ostatní golemy přes
+`.blvl`. Dělení tam platí — jen se na něj nesmí spoléhat jako na pravidlo, až
+model půjde na druidku nebo Vessel skilly.
+
+Rozdíl **není kosmetický**: hráč s 20 body do Blood Golema a +15 z itemů má
+pro `.blvl` odkaz pořád 20, ale pro `.lvl` odkaz 35.
 
 ### 5.3 Engine to už umí, ale modely to nevyužívají
 
@@ -515,7 +563,8 @@ klesly z 20/10 na 10/5). Je to doklad, že Blizzard tenhle rozdíl aktivně lad�
 
 ## 6. Shrnutí pro P1
 
-- **26 sloupců** v `skill` + `skill_param` / `skill_calc` / `skill_stat_ref`.
+- **26 sloupců** v `skill` + `skill_param` / `skill_calc` / `skill_calc_ref` /
+  `skill_stat_ref`.
 - **Priorita č. 1:** `EMin`/`EMax` + `*Lev1..5`. Pátý segment je jediné, co
   nad lvl 28 roste, a je neomezený.
 - **`maxlvl` neomezuje výpočet**, jen investované body.
@@ -523,8 +572,14 @@ klesly z 20/10 na 10/5). Je to doklad, že Blizzard tenhle rozdíl aktivně lad�
   je `(lvl < 4) ?lvl:(2+lvl/3)`.
 - **`base_points` vs `effective_level` musí být v modelu postavy oddělené**
   od začátku; dodělat to zpětně znamená přepsat každý vzorec.
-- **Před golemy ověřit `dm` křivku** (2.4) — je kalibrovaná na lvl 1 a Clay
-  Golem nemá golden test. Viz [`KNOWN_ACCURACY_GAPS.md`](KNOWN_ACCURACY_GAPS.md).
+- **Režim úrovně je vlastnost jednotlivého odkazu, ne skillu ani sloupce ani
+  celého výrazu** (5.2). Proto tabulka `skill_calc_ref` s `level_mode` na
+  každém odkazu — per-skill flag ani per-výraz příznak to nezachytí.
+- **Golemí model není nad lvl 20 důvěryhodný** — `dm` křivka kalibrovaná na
+  lvl 1, Clay Golem bez golden testu, a neověřený režim úrovně u `ln`/`dm`.
+  Tři problémy, které se sčítají; podrobně v
+  [`KNOWN_ACCURACY_GAPS.md`](KNOWN_ACCURACY_GAPS.md), bod 1. Skeletoní větev
+  dotčená není.
 - `overrides/skills_effects.json` — **hotovo**, smazáno 2026-08-28 (1.3).
 
 ### Zdroje

@@ -49,6 +49,17 @@ Fáze 2 (vyhledávání/filtry), 3 (build planner) a 4 (účty) jsou zatím na 0
 Aktuální stav a rizika k datu auditu jsou v `docs/AUDIT_2026-08-28.md` —
 ten dokument se needituje průběžně, je to snapshot k danému datu.
 
+## Konvence projektu
+
+**Veškerá dokumentace a analýzy patří do `docs/`, ne do kořene repozitáře.**
+Platí to pro všechny výstupy — audity, analýzy, návrhy schémat, poznámky
+k rozhodnutím i evidenci známých problémů. V kořeni zůstávají jen soubory,
+které tam musí být (`README`, konfigurace nástrojů, `.gitattributes`,
+`.gitignore`, `conftest.py`, `requirements.txt`).
+
+Stejná logika platí pro skripty: jednorázové a diagnostické nástroje patří do
+`scripts/tools/`, ne do kořene.
+
 ## Struktura repozitáře (klíčové adresáře)
 
 - `data/diablo2/resurrected/helpers/generated/` — vygenerovaná data z CascView exportu

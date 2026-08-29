@@ -1,7 +1,7 @@
 # Datový formát
 
-Popisuje soubory v `data/diablo2/resurrected/helpers/generated/` a
-`data/diablo2/resurrected/helpers/overrides/`, tak jak je produkuje
+Popisuje soubory v `data/diablo2/resurrected/helpers/generated/`,
+tak jak je produkuje
 `scripts/rebuild_dataset.py` a jak je čte `scripts/summon_engine/`.
 
 ## Původ dat
@@ -106,16 +106,21 @@ Mastery). 153 hran, `unresolved` (aktuálně 0) — odkazy, které se nepodařil
 spárovat se skutečným skillem; užitečné jako kontrola konzistence po
 refreshi datasetu.
 
-## `overrides/skills_effects.json`
+## `overrides/` — odstraněno (2026-08-28)
 
-Ruční mapování, protože `skills_raw` sloupce obsahují jen sémantiku hry
-(D2 výrazy jako `max(0, (lvl >= 29) ? (4*lvl - 74) : floor(((lvl-6)*(lvl-2))/15))`),
-ne přímo "tenhle skill ovlivňuje tenhle výstup takhle". Pro každý summon
-definuje: zdroj monstra (`monster_source`), zdrojový attack slot
-(`base_attack_slot`), výrazy pro flat/percent bonusy, a
-`extra_flat_from_skills` (např. Skeleton Mastery přidává flat damage k Raise
-Skeleton). Aktuálně pokrývá pilotně Raise Skeleton + Skeletal Mage — rozšíření
-na další summony je ruční práce per skill.
+Adresář obsahoval `skills_effects.json`: deklarativní pokus popsat, "který
+skill ovlivňuje který výstup jakým vzorcem". **Nečetl ho žádný kód** a nesl
+napevno zadaný polynom pro Raise Skeleton, který se proti `seg5()` z reálných
+dat rozchází o +1 na úrovních 16, 21 a 22. Byl proto smazán, aby ho nikdo
+nepoužil jako zdroj pravdy.
+
+Obsah je dohledatelný v historii:
+`git show 0c1b6a8:data/diablo2/resurrected/helpers/overrides/skills_effects.json`
+
+Autoritativní jsou dnes výrazy přímo v `skills_raw` (`calc*`, `aurastatcalc*`,
+`passivecalc*`, `petmax`, `sumsk*calc`) a jejich vyhodnocení v
+`scripts/summon_engine/expr.py`. Pokud se deklarativní mapování někdy vrátí,
+nesmí duplikovat vzorce — jen odkazovat na sloupce, které je nesou.
 
 ## `ui_catalog.json`
 

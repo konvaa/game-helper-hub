@@ -9,7 +9,7 @@ vyexportovaných herních dat a D2 výpočetních vzorců (ternární operátory
 lineární/segmentované škálování přes úrovně).
 
 Cíl je data-driven: nový summon/skill se má dát přidat přes JSON dataset a
-mapování v `overrides/`, bez zásahu do jádra kalkulátoru. Viz `docs/ROADMAP.md`
+dat v `skills_raw`, bez zásahu do jádra kalkulátoru. Viz `docs/ROADMAP.md`
 pro seznam plánovaných skillů napříč třídami.
 
 ## Plánovaná / současná architektura
@@ -25,7 +25,7 @@ scripts/summon_engine/  (loader.py, expr.py, runner.py, stats.py)
         │  evaluátor D2 výrazů (ternary, seg5/lin/dm, skill('X').lvl reference)
         ▼
 scripts/summon_models/  (raise_skeleton.py, raise_skeletal_mage.py, clay_golem.py, ...)
-        │  konkrétní model per summon, používá engine + overrides/skills_effects.json
+        │  konkrétní model per summon, staví na enginu a sloupcích skills_raw
         ▼
 scripts/summon_cli.py  ──▶  JSON výstup (staty summonu pro danou kombinaci úrovní)
 ```
@@ -54,10 +54,8 @@ ten dokument se needituje průběžně, je to snapshot k danému datu.
 - `data/diablo2/resurrected/helpers/generated/` — vygenerovaná data z CascView exportu
   (viz `docs/DATA_FORMAT.md`). Negenerují se automaticky ze scraping — jediný
   zdroj je ruční CascView export, viz `index.json.excel_dir`.
-- `data/diablo2/resurrected/helpers/overrides/` — ruční mapování "který skill
-  ovlivňuje který výstup jakým vzorcem" (`skills_effects.json`), protože sloupce
-  v `skills_raw`/`skilldesc_raw` samy o sobě nestačí — obsahují D2 výrazy, ne
-  hotové vzorce.
+  (Adresář `overrides/` byl 2026-08-28 odstraněn — obsahoval konfiguraci,
+  kterou nečetl žádný kód. Viz `docs/DATA_FORMAT.md`.)
 - `raw_sources/` — vstupní podklady/poznámky mimo generovaný dataset.
 - `scripts/summon_engine/` — jádro: načítání datasetu, evaluátor výrazů,
   běhové statistiky (`stats.py`), spouštěč (`runner.py`).

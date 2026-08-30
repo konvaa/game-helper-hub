@@ -6,9 +6,15 @@ přivolaných jednotek (summonů) z herních dat a úrovní skillů.
 Plán a zdůvodnění rozhodnutí: [`../docs/PLAN_P1_SPRING_SLICE.md`](../docs/PLAN_P1_SPRING_SLICE.md)
 Průběžné poznámky ke kódu: [`../docs/BACKEND_ZAPISNIK.md`](../docs/BACKEND_ZAPISNIK.md)
 
-**Stav: krok 4 z 8** — kostra aplikace, schéma, JPA entity, importer
-datasetu a repozitáře (filtr + fulltext nad skilly, přístup k monstrům
-a jejich statům). Endpointy zatím žádné - přijdou v kroku 5.
+**Stav: krok 5 z 8** — kostra aplikace, schéma, JPA entity, importer
+datasetu, repozitáře a tři funkční REST endpointy:
+
+- `GET /api/skills?charClass=&q=&page=&size=&sort=` - stránkovaný seznam
+- `GET /api/skills/{key}` - detail skillu
+- `GET /api/monsters/{id}` - detail monstra se staty pro všechny obtížnosti
+
+Compute endpoint (`POST /api/summons/raise-skeleton/compute`) přijde
+v kroku 6.
 
 ## Rychlý start
 

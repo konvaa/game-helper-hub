@@ -59,6 +59,23 @@ spring:
           # znemožňuje - Hibernate musí po každém insertu získat vygenerované ID.
           batch_size: 100
 
+# Vlastni konfigurace aplikace (mimo Spring standard), viz
+# DatasetImportService. Dva plocha retezce - @Value je tu dostatecne,
+# @ConfigurationProperties by pridavalo ceremonii (a novou zavislost na
+# spring-boot-configuration-processor pro IDE napovedu) bez skutecneho
+# prinosu pro dve hodnoty. Vyplati se to az kdyz konfiguracnich hodnot
+# pribude a/nebo budou mit vnorenou strukturu.
+game-helper:
+  dataset:
+    # Musi odpovidat game.code vlozenemu ve V1 migraci.
+    game-code: d2r
+    # Rucne udrzovana hodnota - index.json v datasetu nema pole s verzi
+    # hry, jen excel_dir (cestu k CascView exportu). Kdyz Libor priste
+    # obnovi dataset (docs/PROJECT_OVERVIEW.md, "Jak prigenerovat
+    # dataset"), zmeni se tahle hodnota rucne spolu s prekopirovanim JSON
+    # souboru do src/main/resources/dataset/.
+    source-version: "D2R 3.3"
+
 server:
   port: 8080
 

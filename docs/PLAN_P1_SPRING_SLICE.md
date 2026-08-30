@@ -1,6 +1,6 @@
 # P1 — Spring Boot slice: plán
 
-**Stav dokumentu:** v4 — rozhodnutí v sekci 9, kroky 1–2 hotové.
+**Stav dokumentu:** v5 — rozhodnutí v sekci 9, kroky 1–3 hotové.
 Průběžné poznámky ke kódu: [`BACKEND_ZAPISNIK.md`](BACKEND_ZAPISNIK.md).
 **Datum:** 2026-08-29
 **Rozsah:** podle `AUDIT_2026-08-28.md` sekce 5.4, osekaná varianta.
@@ -457,7 +457,7 @@ auditu 5.4 (osekaná varianta 25–35 h celkem).
 | 0 | **Instalace JDK 21 + Docker Desktop** (viz 8.1) | `java -version` hlásí 21, `docker run hello-world` projde |
 | 1 | **HOTOVO** — kostra: `pom.xml`, `Application`, `application.yml`, compose s Postgresem, `V1` = `game` + `dataset_version` | `spring-boot:run` nastartuje, `flyway_schema_history` existuje |
 | 2 | **HOTOVO** — `V2__skills_and_monsters.sql` + entity `Skill`, `SkillParam`, `Monster`, `MonsterStat` | `ddl-auto=validate` projde |
-| 3 | Importer (`ingest`) | `select count(*) from skill` → 429, `monster` → 752 |
+| 3 | **HOTOVO** — Importer (`ingest`) | `select count(*) from skill` → 429, `monster` → 752 |
 | 4 | Repozitáře + dotaz na filtr a fulltext | dotaz vrací správné řádky |
 | 5 | DTO, mappery, controllery, `@RestControllerAdvice` | tři GET endpointy vrací JSON |
 | 6 | `Seg5` + `RaiseSkeletonCalculator` + parametrizovaný test | **8/8 zelených** |

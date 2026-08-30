@@ -1,8 +1,8 @@
 # P1 — Spring Boot slice: plán
 
-**Stav dokumentu:** v7 — rozhodnutí v sekci 9, kroky 1–5 hotové.
+**Stav dokumentu:** v8 — rozhodnutí v sekci 9, kroky 1–6 hotové.
 Průběžné poznámky ke kódu: [`BACKEND_ZAPISNIK.md`](BACKEND_ZAPISNIK.md).
-**Datum:** 2026-08-29
+**Datum:** 2026-08-30
 **Rozsah:** podle `AUDIT_2026-08-28.md` sekce 5.4, osekaná varianta.
 
 ---
@@ -469,7 +469,7 @@ auditu 5.4 (osekaná varianta 25–35 h celkem).
 | 3 | **HOTOVO** — Importer (`ingest`) | `select count(*) from skill` → 429, `monster` → 752 |
 | 4 | **HOTOVO** — repozitáře (`SkillRepository`, `MonsterRepository`, `MonsterStatRepository`) + filtr/fulltext dotaz | `SkillRepositoryIT` (`-Pit`, viz 7.4) zelený, 8/8 |
 | 5 | **HOTOVO** — DTO, mappery, controllery, `@RestControllerAdvice` | tři GET endpointy vrací JSON, `SkillControllerTest` zelený |
-| 6 | `Seg5` + `RaiseSkeletonCalculator` + parametrizovaný test | **8/8 zelených** |
+| 6 | **HOTOVO** — `Seg5` + `RaiseSkeletonCalculator` + parametrizovaný test, `POST /api/summons/raise-skeleton/compute`, strukturované validační chyby v `ApiExceptionHandler` | `RaiseSkeletonCalculatorTest` 8/8 zelených, `mvn test` 47 / `-Pit` 55 |
 | 7 | springdoc, README, Dockerfile, plné compose | `docker compose up` → Swagger UI na `/swagger-ui` |
 | 8 | *volitelně* Testcontainers IT, GitHub Actions, nasazení (Fly.io / Render) | odkaz do CV |
 

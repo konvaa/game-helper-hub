@@ -153,6 +153,61 @@
               to NEFUNGOVALO (viz BACKEND_ZAPISNIK.md, "Krok 4 - oprava"
               pro přesný důvod), proto teď nepřímo přes property.
             -->
+            <!--
+              Krok 6: baseline_raise_skeleton.json (8 referenčních případů
+              pro RaiseSkeletonCalculatorTest, viz jeho javadoc a
+              PLAN_P1_SPRING_SLICE.md sekce 7.3) žije v
+              "scripts/tests/" - MIMO backend/ modul, protože je to
+              společný soubor pro Python i Java stranu projektu (jediný
+              zdroj pravdy, ne dvě kopie, které se časem rozejdou - stejný
+              problém, který je zapsaný jako "otevřená otázka" v
+              BACKEND_ZAPISNIK.md pro CELÝ dataset, jen tady řešený hned
+              správně u JEDNOHO souboru, ať nevzniká druhý stejný případ).
+
+              Testovací classpath ale žádnou cestu "o úroveň výš" znát
+              nesmí (rozbilo by se to v Dockeru/CI, kde backend/ může být
+              jediné, co je k dispozici - PLAN_P1_SPRING_SLICE.md sekce
+              7.3). Řešení: soubor se PŘI BUILDU zkopíruje do
+              target/test-classes, odkud ho test čte jako obyčejný
+              classpath resource ("/baseline_raise_skeleton.json") - v
+              repozitáři existuje jen JEDNA verze, v jednom místě.
+
+              Fáze "generate-test-resources" běží před kompilací testů,
+              takže je soubor v target/test-classes/ dřív, než
+              RaiseSkeletonCalculatorTest vůbec začne. Bez <targetPath>
+              (výchozí = kořen výstupního adresáře) skončí přesně na
+              "/baseline_raise_skeleton.json", ne v podadresáři.
+
+              Vědomé omezení: tohle řeší jen TENHLE jeden testovací
+              soubor, ne celý duplicitní dataset (JSON v data/**/generated/
+              vs. backend/src/main/resources/dataset/) - to zůstává
+              otevřené do doby, kdy se bude řešit krok 7 (Docker build).
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-baseline-raise-skeleton</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/../scripts/tests</directory>
+                                    <includes>
+                                        <include>baseline_raise_skeleton.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

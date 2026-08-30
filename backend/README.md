@@ -6,9 +6,9 @@ přivolaných jednotek (summonů) z herních dat a úrovní skillů.
 Plán a zdůvodnění rozhodnutí: [`../docs/PLAN_P1_SPRING_SLICE.md`](../docs/PLAN_P1_SPRING_SLICE.md)
 Průběžné poznámky ke kódu: [`../docs/BACKEND_ZAPISNIK.md`](../docs/BACKEND_ZAPISNIK.md)
 
-**Stav: krok 3 z 8** — kostra aplikace, schéma, JPA entity a importer
-datasetu (`skill`, `monster`, jejich staty a parametry se naplní při
-startu z dat zabalených v jaru). Endpointy zatím žádné.
+**Stav: krok 4 z 8** — kostra aplikace, schéma, JPA entity, importer
+datasetu a repozitáře (filtr + fulltext nad skilly, přístup k monstrům
+a jejich statům). Endpointy zatím žádné - přijdou v kroku 5.
 
 ## Rychlý start
 

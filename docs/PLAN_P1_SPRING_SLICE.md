@@ -1,6 +1,6 @@
 # P1 — Spring Boot slice: plán
 
-**Stav dokumentu:** v5 — rozhodnutí v sekci 9, kroky 1–3 hotové.
+**Stav dokumentu:** v6 — rozhodnutí v sekci 9, kroky 1–4 hotové.
 Průběžné poznámky ke kódu: [`BACKEND_ZAPISNIK.md`](BACKEND_ZAPISNIK.md).
 **Datum:** 2026-08-29
 **Rozsah:** podle `AUDIT_2026-08-28.md` sekce 5.4, osekaná varianta.
@@ -445,6 +445,15 @@ Návrh kompromisu: integrační testy pod Maven profilem `-Pit` (nebo
 a `mvn verify -Pit` pustí i ty s Dockerem. Řeší to obojí a je to samo o sobě
 věc, o které se dá u pohovoru mluvit.
 
+**Update z kroku 4:** `SkillRepositoryIT` implementuje přesně tenhle návrh,
+jen o rok dřív, než sekce 7.2 čekala, a s jednou drobnou odchylkou -
+`@Tag("it")` + Surefire profil `-Pit` (ne Failsafe), a cílem je přímo
+databáze z `docker compose up` (ta samá, co používáš na verifikaci od
+kroku 1), ne Testcontainers. Testcontainers zůstává v plánu pro krok 8 -
+až přibude víc IT testů, `-Pit` profil se dá přepnout na Testcontainers bez
+zásahu do testovacích tříd samotných, jen do konfigurace datového zdroje.
+Detaily v `BACKEND_ZAPISNIK.md`, krok 4.
+
 ---
 
 ## 8. Pořadí prací
@@ -458,7 +467,7 @@ auditu 5.4 (osekaná varianta 25–35 h celkem).
 | 1 | **HOTOVO** — kostra: `pom.xml`, `Application`, `application.yml`, compose s Postgresem, `V1` = `game` + `dataset_version` | `spring-boot:run` nastartuje, `flyway_schema_history` existuje |
 | 2 | **HOTOVO** — `V2__skills_and_monsters.sql` + entity `Skill`, `SkillParam`, `Monster`, `MonsterStat` | `ddl-auto=validate` projde |
 | 3 | **HOTOVO** — Importer (`ingest`) | `select count(*) from skill` → 429, `monster` → 752 |
-| 4 | Repozitáře + dotaz na filtr a fulltext | dotaz vrací správné řádky |
+| 4 | **HOTOVO** — repozitáře (`SkillRepository`, `MonsterRepository`, `MonsterStatRepository`) + filtr/fulltext dotaz | `SkillRepositoryIT` (`-Pit`, viz 7.4) zelený, 8/8 |
 | 5 | DTO, mappery, controllery, `@RestControllerAdvice` | tři GET endpointy vrací JSON |
 | 6 | `Seg5` + `RaiseSkeletonCalculator` + parametrizovaný test | **8/8 zelených** |
 | 7 | springdoc, README, Dockerfile, plné compose | `docker compose up` → Swagger UI na `/swagger-ui` |

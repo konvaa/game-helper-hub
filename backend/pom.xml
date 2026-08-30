@@ -39,6 +39,16 @@
         -->
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!--
+          Krok 4, oprava profilu "-Pit" (viz BACKEND_ZAPISNIK.md, "Krok 4 -
+          oprava"). Vlastní property s hodnotou, kterou pak profil "it" níž
+          jen PŘEPÍŠE - properties se v Mavenu mezi POM a aktivním profilem
+          přepisují spolehlivě (na rozdíl od konfigurace pluginu, viz dál),
+          takže je to bezpečnější místo pro přepínání "zapnuto/vypnuto" než
+          <configuration> samotného pluginu.
+        -->
+        <surefire.excludedGroups>it</surefire.excludedGroups>
     </properties>
 
     <dependencies>
@@ -115,6 +125,74 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!--
+              Krok 4: SkillRepositoryIT potřebuje běžící Postgres s daty
+              z kroku 3 (viz jeho javadoc) - bez tohohle nastavení by
+              "mvnw test" spadl na každém stroji, kde zrovna neběží
+              "docker compose up" (PLAN_P1_SPRING_SLICE.md 7.4: "mvn test
+              musí být zelený vždycky").
+
+              <includes> je EXPLICITNÍ a zužuje výchozí vzory Surefire
+              (Test*, *Test, *Tests, *TestCase) na jen *Test a *IT. Důvod:
+              Surefire ve výchozím nastavení soubory *IT.java VŮBEC
+              nezahrnuje (to je konvence Failsafe pluginu, který tu
+              nemáme) - kdybych sem jen přidal @Tag("it") a nechal
+              výchozí <includes>, SkillRepositoryIT by se nespustilo
+              nikdy, ani přes "-Pit" profil níž. Do budoucna to znamená:
+              testovací třídy musí končit na "Test" nebo "IT", jinak je
+              mvn test tiše přeskočí.
+
+              <excludedGroups> vylučuje testy se JUnit 5 @Tag("it") -
+              to už je nezávislý mechanismus od <includes> výš, řeší
+              jinou věc (KTERÉ ze zahrnutých tříd spustit, ne KTERÉ
+              soubory vůbec načíst). Hodnota je {@code ${surefire.excludedGroups}}
+              (property výš), NE napevno "it" - profil "it" níž property
+              přepíše na prázdnou. Původně jsem tu měl "it" napevno a profil
+              se snažil přepsat rovnou <excludedGroups> v <configuration> -
+              to NEFUNGOVALO (viz BACKEND_ZAPISNIK.md, "Krok 4 - oprava"
+              pro přesný důvod), proto teď nepřímo přes property.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*IT.java</include>
+                    </includes>
+                    <excludedGroups>${surefire.excludedGroups}</excludedGroups>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!--
+          "mvnw test -Pit" spustí VŠECHNY testy včetně těch se štítkem
+          "it" (SkillRepositoryIT). Vyžaduje běžící "docker compose up -d
+          db" s naimportovanými daty z kroku 3.
+
+          Přepisuje se PROPERTY (surefire.excludedGroups), ne přímo
+          <configuration> pluginu. Zkoušel jsem to nejdřív přímo -
+          <profile><build><plugins><plugin> se stejnou <configuration> a
+          prázdným <excludedGroups/> uvnitř - a NEFUNGOVALO to (ověřeno,
+          viz BACKEND_ZAPISNIK.md "Krok 4 - oprava"). Maven konfiguraci
+          pluginu z profilu do hlavního <build> nepřepíše automaticky -
+          když se stejný list existuje na obou místech, VYHRÁVÁ hlavní
+          <build>, ne profil, a profilová hodnota se tiše zahodí (dalo by
+          se to obejít atributem combine.self="override" na tom elementu,
+          ale to je málo známý detail Maven XML mergingu, který by musel
+          znát každý, kdo pom.xml příště upravuje). Properties se naproti
+          tomu mezi POM a aktivním profilem přepisují VŽDY spolehlivě -
+          proto se tahle hodnota nastavuje TAM, viz <properties> výš, a
+          sem patří jen její přepsání na prázdno.
+        -->
+        <profile>
+            <id>it</id>
+            <properties>
+                <surefire.excludedGroups></surefire.excludedGroups>
+            </properties>
+        </profile>
+    </profiles>
 </project>

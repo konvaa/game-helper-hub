@@ -2,6 +2,8 @@ package cz.libor.gamehelper.summon;
 
 import cz.libor.gamehelper.summon.dto.ComputeRequest;
 import cz.libor.gamehelper.summon.dto.ComputeResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  * {@code MonsterController} v kroku 5: Spring si {@code @RestController}
  * najde přes classpath scanning, veřejná viditelnost tu nic nepřidává.
  */
+@Tag(name = "Summons", description = "Výpočet statů přivolaných jednotek. P1 slice: jen Raise Skeleton.")
 @RestController
 @RequestMapping("/api/summons")
 class SummonController {
@@ -43,6 +46,12 @@ class SummonController {
      * {@link ComputeRequest} javadoc, jak se tahle výjimka dál mapuje na
      * 400 + {@code ProblemDetail}).
      */
+    @Operation(
+            summary = "Spočítá staty jednoho přivolaného kostlivce (Raise Skeleton)",
+            description = "8/8 shodných výsledků s referenční Python implementací "
+                    + "(RaiseSkeletonCalculatorTest, scripts/tests/baseline_raise_skeleton.json). "
+                    + "400 s ProblemDetail (pole \"errors\") při neplatném vstupu - viz "
+                    + "ApiExceptionHandler.")
     @PostMapping("/raise-skeleton/compute")
     ComputeResponse compute(@Valid @RequestBody ComputeRequest request) {
         return summonService.computeRaiseSkeleton(request);

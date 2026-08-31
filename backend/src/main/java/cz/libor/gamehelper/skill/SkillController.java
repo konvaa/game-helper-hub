@@ -3,6 +3,9 @@ package cz.libor.gamehelper.skill;
 import cz.libor.gamehelper.common.PagedResponse;
 import cz.libor.gamehelper.skill.dto.SkillDetailDto;
 import cz.libor.gamehelper.skill.dto.SkillSummaryDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * seřazených podle jména odpovídá příkladu v plánu
  * ({@code ?...&size=20&sort=name,asc}).
  */
+@Tag(name = "Skills", description = "Katalog skillů (429 řádků, D2R) - seznam s filtrem/fulltextem a detail.")
 @RestController
 @RequestMapping("/api/skills")
 public class SkillController {
@@ -38,14 +42,25 @@ public class SkillController {
         this.skillService = skillService;
     }
 
+    @Operation(
+            summary = "Stránkovaný seznam skillů",
+            description = "Volitelný filtr podle třídy postavy (`charClass`, např. \"nec\") a "
+                    + "case-insensitivní fulltext v názvu (`q`). Bez parametrů vrátí celý katalog "
+                    + "stránkovaně (`page`/`size`/`sort` řeší Spring Data Web automaticky).")
     @GetMapping
     public PagedResponse<SkillSummaryDto> list(
+            @Parameter(description = "Filtr podle třídy postavy, např. \"nec\", \"bar\". Bez hodnoty = všechny třídy.")
             @RequestParam(required = false) String charClass,
+            @Parameter(description = "Case-insensitivní fulltext v názvu skillu, např. \"skel\".")
             @RequestParam(required = false) String q,
             @PageableDefault(size = 20, sort = "name") Pageable pageable) {
         return skillService.search(charClass, q, pageable);
     }
 
+    @Operation(
+            summary = "Detail jednoho skillu podle klíče",
+            description = "`key` je normalizovaný business klíč (např. \"raise_skeleton\"), NE "
+                    + "databázové ID. 404 s ProblemDetail, pokud klíč neexistuje.")
     @GetMapping("/{key}")
     public SkillDetailDto getByKey(@PathVariable String key) {
         return skillService.getByKey(key);

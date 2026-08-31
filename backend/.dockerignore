@@ -1,0 +1,13 @@
+# Krok 7 - co NEPOSÍLAT do Docker build kontextu (viz docker-compose.yml,
+# služba "api", build.context: .). Bez tohohle souboru by "docker compose
+# up --build" posílal daemonu i target/ (klidně stovky MB starých .class
+# a jarů) a IDE soubory - zbytečně pomalejší build, žádný funkční dopad,
+# ale stojí to čas i místo.
+
+target/
+.idea/
+*.iml
+.vscode/
+.git/
+.gitignore
+*.log

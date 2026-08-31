@@ -1,5 +1,6 @@
 package cz.libor.gamehelper.summon.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -43,19 +44,40 @@ import jakarta.validation.constraints.Pattern;
  * s tím vzorem je tu důležitější než "silnější" typ na hranici HTTP
  * requestu. {@code @Pattern} ověří tvar TADY (400 při překlepu), servisní
  * vrstva string na {@code Difficulty} mapuje AŽ POTÉ, co ví, že je platný.
+ *
+ * <p><b>{@code @Schema(description = ...)} na každém poli (krok 7):</b> přesně
+ * to plán sekce 5.1 slíbil - "Do @Schema(description=...) to napíšeme, ať je
+ * to v Swaggeru vidět". Bez toho by Swagger UI u {@code raiseSkeletonLevel}
+ * ukázal jen typ a rozsah (1-99) BEZ vysvětlení, PROČ je strop 99, a někdo,
+ * kdo plán nečetl, by si mohl myslet, že je to překlep místo 20. Popisek
+ * z tyhle anotace se objeví přímo ve vygenerovaném OpenAPI/Swagger UI - je to
+ * jediné místo, kde se tahle vysvětlivka dostane až ke KLIENTOVI API, ne jen
+ * k někomu, kdo čte zdrojový kód.
  */
 public record ComputeRequest(
 
+        @Schema(
+                description = "Efektivní úroveň skillu Raise Skeleton (NE strop investovaných "
+                        + "bodů, který je 20 - viz SKILLS_PROJECTION.md 2.5). Itemy/aury ji v D2R "
+                        + "můžou zvednout nad 20, proto rozsah 1-99.",
+                example = "20", minimum = "1", maximum = "99")
         @NotNull(message = "raiseSkeletonLevel je povinné")
         @Min(value = 1, message = "raiseSkeletonLevel musí být alespoň 1")
         @Max(value = 99, message = "raiseSkeletonLevel může být nejvýš 99")
         Integer raiseSkeletonLevel,
 
+        @Schema(
+                description = "Efektivní úroveň skillu Skeleton Mastery - stejný důvod rozsahu "
+                        + "1-99 jako u raiseSkeletonLevel.",
+                example = "11", minimum = "1", maximum = "99")
         @NotNull(message = "skeletonMasteryLevel je povinné")
         @Min(value = 1, message = "skeletonMasteryLevel musí být alespoň 1")
         @Max(value = 99, message = "skeletonMasteryLevel může být nejvýš 99")
         Integer skeletonMasteryLevel,
 
+        @Schema(
+                description = "Herní obtížnost. Case-insensitive (\"HELL\" i \"hell\" projdou).",
+                example = "hell", allowableValues = {"normal", "nightmare", "hell"})
         @NotBlank(message = "difficulty je povinné")
         @Pattern(regexp = "(?i)normal|nightmare|hell", message = "difficulty musí být normal, nightmare nebo hell")
         String difficulty) {

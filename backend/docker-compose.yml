@@ -1,8 +1,9 @@
-# Lokální PostgreSQL pro vývoj.
+# Lokální PostgreSQL + Spring Boot API.
 #
-# V kroku 1 je tu jenom databáze - aplikaci pouštíš z IntelliJ nebo přes
-# mvnw spring-boot:run. Služba "api" (build z Dockerfile) přibude v kroku 7,
-# aby akceptační kritérium "docker compose up -> běží API i databáze" platilo.
+# "docker compose up" -> obě služby běží bez mountování hostitelských cest
+# (akceptační kritérium PLAN_P1_SPRING_SLICE.md sekce 8). Služba "api" se
+# staví přímo z backend/Dockerfile (multi-stage - viz ten soubor); "db" je
+# beze změny od kroku 1.
 #
 # Klíč "version:" se dneska neuvádí - Compose V2 ho ignoruje a varuje.
 
@@ -26,12 +27,42 @@ services:
     healthcheck:
       # Kontejner hlásí "started" hned, jak se spustí proces - ale Postgres
       # v tu chvíli ještě nepřijímá spojení. Bez healthchecku by služba "api"
-      # v kroku 7 startovala dřív než databáze a padala na connection refused.
-      # depends_on: condition: service_healthy se opírá právě o tohle.
+      # startovala dřív než databáze a padala na connection refused.
+      # depends_on: condition: service_healthy (viz níž) se opírá právě o tohle.
       test: [ "CMD-SHELL", "pg_isready -U gamehelper -d gamehelper" ]
       interval: 5s
       timeout: 3s
       retries: 10
+
+  api:
+    # Krok 7 - staví se přímo z backend/Dockerfile (kontext "." = backend/,
+    # protože docker-compose.yml je v backend/). Viz Dockerfile pro detail
+    # multi-stage buildu; viz docs/BACKEND_ZAPISNIK.md, "Krok 7" pro
+    # zdůvodnění -DskipTests a ne-root uživatele v tom buildu.
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gamehelper-api
+    depends_on:
+      db:
+        # NE jen výchozí "service_started" - bez tohohle by api mohlo
+        # naběhnout dřív, než Postgres skutečně přijímá spojení, a spadnout
+        # na connection refused (Flyway migrace běží automaticky při startu
+        # Spring kontextu, viz backend/README.md). "service_healthy" čeká na
+        # healthcheck výš.
+        condition: service_healthy
+    environment:
+      # Přebíjí "${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/gamehelper}"
+      # default v application.yml (ten default je pro spouštění MIMO Docker -
+      # mvnw spring-boot:run z IntelliJ proti "db" mapované na localhost:5432
+      # výš). Uvnitř Compose sítě "localhost" v kontejneru api NEUKAZUJE na
+      # kontejner db - "db" je jméno služby, Compose ho řeší jako DNS jméno
+      # v interní síti, kterou si Compose sám vytváří.
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/gamehelper
+      SPRING_DATASOURCE_USERNAME: gamehelper
+      SPRING_DATASOURCE_PASSWORD: gamehelper
+    ports:
+      - "8080:8080"
 
 volumes:
   pgdata:

@@ -456,3 +456,175 @@ bez testu.
 U `rs01_sm01_hell` tedy zbývá jen `count`. Sloučení do ověřené sady dává smysl
 až bude potvrzená celá trojice — hranice 3→4 je z nich nejcennější, protože
 za ní strážce přestává platit.
+
+---
+
+## 5. Bázová hodnota AR/DEF: bereme sloupec pro hell, Maxroll pro normal
+
+**Stav:** otevřené, nerozhodnuté · **Riziko:** střední (posun o konstantu) ·
+**Založeno:** 2026-08-30
+
+### Co se ví
+
+Náš engine počítá `defense = ac + (lvl+sm)*Param5` a `ar = a1_th + (lvl+sm)*Param4`,
+kde `ac`/`a1_th` bere z `monsters_base` **pro zvolenou obtížnost**. Maxroll
+(který počítá vždy hell) dává systematicky jiné báze — a ty odpovídají
+**normal** sloupcům `monstats.txt` (`AC`, `A1TH` bez suffixu):
+
+| summon | stat | Maxroll báze | normal sl. | hell sl. | verdikt |
+|---|---|---|---|---|---|
+| Raise Skeleton | def | 5 | **5** | 6 | normal |
+| Raise Skeleton | AR | 5 | **5** | 6 | normal |
+| Clay Golem | AR | 40 | **40** | 92 | normal |
+| Clay Golem | def | 100 | 100 | 100 | nerozliší |
+| Skeletal Mage | def | **0** | 24 | 28 | **ani jedno** |
+
+Tři ze čtyř rozlišujících měření ukazují na normal sloupec. Dopad na náš
+výstup je konstantní posun (+1 u Raise Skeletonu na hell, +52 u AR Clay Golema).
+
+### Silný doklad, že formule jako takové čteme správně
+
+Clay Golem AR se podařilo zreprodukovat **přesně na všech 6 měřeních** vzorcem
+vzatým doslova z dat (`passivecalc2 = skill('Golem Mastery'.ln56) + (lvl*par8)`):
+
+```
+AR = base + (25 + (M-1)*25) + lvl*20        base = 40 = claygolem A1TH (normal)
+lvl 1/5/10 při M=0    -> 60 / 140 / 240     (Maxroll: 60 / 140 / 240)
+lvl 10 při M=1/5/10   -> 265 / 365 / 490    (Maxroll: 265 / 365 / 490)
+```
+
+Struktura vzorce, koeficienty i příspěvek mastery tedy sedí. **Sporná je jen
+ta bázová konstanta.**
+
+### Co k tomu řekl D2R Data Guide (2026-08-30)
+
+Dotaz na `d2r-tools.com/data/skills` a `/data/monstats` (původní
+`locbones.github.io` se pro automatické načtení pořád usekává před sekcí
+Skills — ověřeno znovu).
+
+**Potvrzeno:** „The same stat block repeats three times — once for each
+difficulty. Normal uses no suffix; Nightmare appends `(N)`; Hell appends
+`(H)`." Naše mapování sloupců na obtížnosti je tedy správné.
+
+**Nezodpovězeno:** guide **nikde neuvádí, ze které obtížnosti bere base
+přivolaný pet**, ani jestli je `aurastat` přírůstek nebo náhrada. K petům má
+jedinou větu („primary definition table for every monster unit in D2R: enemy
+monsters, pets, and NPCs"). O odchylkách mezi zobrazením a výpočtem nemá nic.
+
+**Nový poznatek, který stálo za to najít:** guide popisuje `AC` jako „Base
+defense **before monlvl scaling**" a HP jako
+`Actual HP = roll(minHP, maxHP) × L-HP(H) / 100`. Existuje tedy vrstva
+škálování přes `monlvl.txt`, kterou **náš engine ani backend vůbec nečtou** —
+`monlvl_ratios.json` v datasetu leží, ale nikdo ho nepoužívá.
+
+Zároveň je ale doložené, že se **na summony nevztahuje**: hell `hp` ratio je
+na nízkých úrovních ~830 %, takže při jeho aplikaci by měl skeleton kolem 349
+HP místo 42. Naše hodnota 42 sedí s hrou i s Maxrollem. Pro summony se tedy
+`monlvl` neaplikuje a syrové čtení je strukturálně správné.
+
+### Nejsilnější argument, který teď máme
+
+**HP prokazatelně bere hell sloupec.** `necroskeleton` má `maxHP` = 21
+(normal) a 42 (hell); naše hodnota 50 pro `rs=1/sm=1` vychází ze 42 a je
+potvrzená tooltipem i Maxrollem. Kdyby se bral normal sloupec, vyšlo by 29.
+
+Bylo by tedy zvláštní, aby tentýž monstr bral HP z hell bloku a AC z normal
+bloku. To ukazuje na **náš model jako správný a na Maxroll jako vnitřně
+nekonzistentní** (hell HP + normal AC) — což je přesně ta nekonzistence,
+které si všiml Libor.
+
+Je to **argument, ne důkaz**. Nevylučuje, že hra u obrany summonů dělá něco
+speciálního.
+
+### Co se neví
+
+1. **Kdo má pravdu — pořád nerozhodnuto**, jen se váha přiklonila k nám (viz
+   argument výše). Rozhodlo by měření obrany téhož summonu ve hře na normal
+   a na hell: liší-li se (5 vs 6), má pravdu náš model; je-li stejná,
+   Maxroll.
+2. **Skeletal Mage vybočuje a nevím proč.** Báze 0 neodpovídá žádnému sloupci
+   žádné obtížnosti (24/26/28) a **žádné monstrum v `monstats.txt` nemá AC=0**.
+   Hledání sloupce s hodnotami (skeleton 5, mage 0, golem 100) napříč všemi
+   273 sloupci nenašlo nic. Možnosti: Maxroll u mage zobrazuje jen bonus místo
+   celku, měření je jiná veličina, nebo je to na jejich straně chyba. Stojí za
+   přeměření dřív, než se z toho vyvodí cokoli o našem modelu.
+
+### Co to NEohrožuje
+
+HP a damage se počítají jinou větví (`max_hp`, `a1_min_d`/`a1_max_d`) a
+Maxrollem už jsou potvrzené. Případná oprava báze se jich nedotkne.
+
+---
+
+## 6. Golemí synergie do statů — příspěvky, se kterými náš model nepočítá
+
+**Stav:** zapsáno, neřešeno · **Riziko:** neznámé · **Založeno:** 2026-08-30
+
+U golemů existují synergie i pro **staty** (ne jen pro damage), a část z nich
+se podle uživatele počítá ze **soft levelu**, ne z hard pointů. To znamená, že
+čísla odečtená z Maxrollu můžou obsahovat příspěvky, které náš model vůbec
+nemá — a při porovnávání se to projeví jako „naše hodnota je nižší" nebo jako
+nevysvětlený zbytek.
+
+Souvisí to přímo s bodem 1, problémem C (režim úrovně u `ln`/`dm` tokenů) a
+s bodem 3 (režim je vlastnost jednotlivého odkazu).
+
+**Praktický důsledek pro analýzu v bodu 5:** dokud není jasné, které synergie
+do statů vstupují a s jakou úrovní, nelze u golemů brát rozdíl proti Maxrollu
+automaticky jako chybu báze — může to být chybějící příspěvek.
+
+Dílčí protidoklad, který stojí za zaznamenání: Clay Golem AR se podařilo
+zreprodukovat přesně bez jakéhokoli dalšího příspěvku (viz bod 5), takže
+aspoň v téhle jedné veličině nám nic nechybí. Měření ale byla jen do
+mastery 10, tedy pod hard capem — soft/hard rozdíl se tam nemohl projevit.
+
+### Konkrétní nález: `clay_golem.py` se u Iron Golem synergie rozchází s daty
+
+Data (`skills_raw.json`, Clay Golem `passivecalc4`, stat `armorclass`):
+
+```
+skill('IronGolem'.blvl) * skill('IronGolem'.par8)          <- BASE (hard pointy)
+```
+
+Náš model (`scripts/summon_models/clay_golem.py`, řádky 111–112):
+
+```python
+# armorclass: Iron synergy uses TOTAL level (iron.lvl), not blvl
+armor_flat = eval_expr("skill('IronGolem'.lvl) * skill('IronGolem'.par8)")
+```
+
+Tři věci k tomu:
+
+1. **Odchylka je vědomá, ale bez odůvodnění.** Komentář výslovně říká, že se
+   používá `lvl` místo `blvl` — neuvádí ale proč. Není u toho odkaz na měření,
+   na zdroj ani na diskuzi.
+2. **Dnes se neprojeví, později výrazně.** S Iron Golemem na 0 dávají oba
+   režimy nulu. Jakmile do něj půjdou body, začnou se rozcházet — a nad lvl 20
+   s `+skills` výrazně, protože `blvl` zůstane zastropovaný na 20, zatímco
+   `lvl` poroste dál. Přesně v pásmu, kvůli kterému aplikace existuje.
+3. **Otevřená otázka: odkud ta změna vzešla?** Buď z měření ve hře — a pak
+   data v `skills.txt` neodpovídají skutečnému chování a je to cenný poznatek,
+   který patří zdokumentovat. Nebo omylem při psaní modelu — a pak je to chyba
+   k opravě. Z kódu ani z historie to nejde poznat. **Neopravovat, dokud se to
+   nerozhodne**; oprava „podle dat" by v prvním případě rozbila správné
+   chování.
+
+### Vyřešeno: proč má Clay Golem konstantní obranu
+
+Zdálo se, že tři summony mají tři různá chování obrany (golem bere base AC,
+mage ne, skeleton ani jedno). U Clay Golema to byla iluze — jeho `armorclass`
+prostě není bonus z úrovně:
+
+```
+Raise Skeleton / Skeletal Mage:  armorclass = (lvl + SkeletonMastery.lvl) * par5
+Clay Golem:                      armorclass = IronGolem.blvl * IronGolem.par8
+```
+
+U golema je to **synergie z Iron Golema**, ne škálování podle vlastní úrovně.
+S Iron Golemem na 0 je bonus nulový, takže obrana zůstává rovna base AC (100)
+bez ohledu na úroveň Clay Golema i Golem Mastery. Přesně to Maxroll ukázal.
+
+**K téhle otázce se není potřeba vracet.** Zbývající nevysvětlená věc je jen
+nula u Skeletal Mage (bod 5) — u něj je vzorec znak po znaku identický
+s Raise Skeletonem, liší se pouze `par5` (10 vs 15), takže v datech pro ni
+žádný důvod není.

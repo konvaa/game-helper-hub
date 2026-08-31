@@ -143,13 +143,31 @@ Seřazeno od nejspolehlivějšího.
 přesně a **bylo to opakovaně ověřené proti hře**. To z něj dělá nejspolehlivější
 dostupný referenční bod, spolehlivější než odečítání tooltipu ve hře.
 
+> **Maxroll počítá VŽDY hell obtížnost.** Zjištěno 2026-08-30 při ověřování
+> nízkoúrovňového případu. Není to volitelné a nikde se to nepřepíná.
+>
+> Určuje to, co se přes něj dá a nedá ověřit: **non-hell případy jsou pro
+> Maxroll neviditelné.** Konkrétně jde o 6 případů napříč sadami —
+> `rs35_sm35_nm`, `rs35_sm35_norm`, `rsm26_sm30_nm`, `rsm26_sm30_norm`,
+> `rsm40_sm40_nm`, `rsm40_sm40_norm`. Ty čtyři z `*_highlvl` sad tedy
+> **zůstanou neověřené i po kompletní kontrole přes Maxroll** a potřebují jiný
+> zdroj (tooltip u Raise Skeletonu, viz b).
+>
+> Obráceně je to dobrá zpráva pro zbytek: všech 8 ověřených RS případů, obě
+> `*_highlvl` sady mimo těch 6, i celá `*_lowlvl` sada jsou hell — Maxrollem
+> pokrytelné.
+
+**První skutečné ověření proti Maxrollu proběhlo 2026-08-30:** `rs=1, sm=1`
+dává v Maxrollu `hp=50`, shodně s naším enginem. Jeden bod, ale první tvrdý
+doklad, že se v základu shodujeme.
+
 Dvě věci k němu ale zůstávají **nezjištěné** — nedokázal jsem je ověřit,
 protože planner je pro automatické načtení blokovaný přes `robots.txt`:
 
 1. **Přijímá efektivní úrovně nad 20?** Planner pracuje s investovanými body
    (cap 20) plus výbavou; jestli se `+skills` z itemů promítnou do zobrazeného
    damage summonů, je potřeba ověřit ručně. Bez toho je pro pásmo 29+
-   nepoužitelný.
+   nepoužitelný. Ověření na `rs=1` tuhle otázku neposunulo — je pod capem.
 2. **Jaká je jeho nezávislost?** Nepodařilo se zjistit, jestli čte stejné
    herní `.txt` soubory jako my, nebo má vlastní model.
    **Pokud sdílíme zdroj, platí stejná výhrada jako u palmdabomb: shoda
@@ -375,3 +393,66 @@ summon skilly.
 
 Ověřeno, že oprava **nezměnila ani jednu hodnotu**: původních 17 případů dál
 prochází a přegenerované `*_highlvl.json` sady jsou bajt po bajtu identické.
+
+---
+
+## 4. Díra v pokrytí na nízkých úrovních Raise Skeletonu — VYŘEŠENO 2026-08-30
+
+**Stav:** chyba opravena, pokrytí zatím kandidátní · **Riziko:** vyřešeno ·
+**Nalezeno:** ručně uživatelem, ne testem
+
+### Co se stalo
+
+Java port (`backend/.../RaiseSkeletonCalculator.java`) vracel pro
+`rs=1, sm=1, hell` hodnoty **dmg 2–3, hp 8** místo správných **3–4, 50**.
+Python reference byla po celou dobu v pořádku.
+
+Příčina: neportovaný strážce `lvl < 4`. Java počítala
+`levelsAbovePercentBase = rsLevel - 3` bez ošetření záporného výsledku, takže
+na 1. úrovni vyšlo −2, z toho dmg −14 % (násobitel 0,86) a HP −100 %.
+Výsledek byl **nižší než holé staty monstra**.
+
+V Pythonu je ten strážce na třech místech nezávisle
+(`raise_skeleton.py` řádky 48, 129, 157). V Javě byl jen ve větvi `count`,
+proto `count` vycházel správně, zatímco `hp` a `damage` ne — což bylo současně
+vodítko, kde chybu hledat.
+
+Opraveno jedním clampem `Math.max(0, rsLevel - PERCENT_SCALING_BASE_LEVEL)`;
+`damageMultiplier` i `hp` z té proměnné oba vycházejí. Pro `rsLevel == 3` dává
+obojí shodně 0, takže je to přesná ekvivalence s Pythonem.
+
+### Proč to testy nezachytily
+
+**Okno chyby byly jen úrovně `rs = 1` a `rs = 2`.** Na úrovni 3 je
+`(3−3) × Param = 0`, takže obě varianty splynou; od 4 výš strážce nedělá nic.
+
+A **nejnižší případ v celé baseline sadě Raise Skeletonu je `rs = 5`** —
+ani jeden z 8 ověřených, ani jeden z 11 v `*_highlvl` sadě nemá `rs < 4`.
+Celá větev `lvl < 4` byla netestovaná: nulové HP %, nulové dmg %,
+`count = lvl` místo `2 + lvl/3` i `seg5` vracející holý `EMin`.
+
+**Skeletal Mage dotčený nebyl** — jeho sada má `rsm = 1` a `rsm = 3`, takže
+spodní okraj pokrytý má. Díra byla výhradně v Raise Skeletonu.
+
+Poučení, které stojí za zopakování: `*_highlvl` sada vznikla s pozorností
+upřenou výhradně nahoru (pásmo nad lvl 28), protože to bylo zadání. Spodní
+okraj nikdo neprověřil, přestože jde o stejný typ mezery — okrajovou větev
+bez testu.
+
+### Kandidátní případy, čekající na potvrzení ze hry
+
+`scripts/tests/cases_raise_skeleton_lowlvl.json` +
+`baseline_raise_skeleton_lowlvl.json` (3 případy: `rs01_sm01_hell`,
+`rs02_sm01_hell`, `rs03_sm01_hell`).
+
+**Nejsou součástí ověřené sady** — ale stav ověření se 2026-08-30 posunul:
+
+| případ | damage | hp | count |
+|---|---|---|---|
+| `rs01_sm01_hell` | potvrzeno (tooltip) | **potvrzeno (Maxroll, hp=50)** | nepotvrzeno |
+| `rs02_sm01_hell` | nepotvrzeno | nepotvrzeno | nepotvrzeno |
+| `rs03_sm01_hell` | nepotvrzeno | nepotvrzeno | nepotvrzeno |
+
+U `rs01_sm01_hell` tedy zbývá jen `count`. Sloučení do ověřené sady dává smysl
+až bude potvrzená celá trojice — hranice 3→4 je z nich nejcennější, protože
+za ní strážce přestává platit.

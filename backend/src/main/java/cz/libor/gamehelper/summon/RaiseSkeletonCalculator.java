@@ -114,7 +114,14 @@ final class RaiseSkeletonCalculator {
                 scaling.eMinLev3(), scaling.eMinLev4(), scaling.eMinLev5());
         int totalSkillBonus = rsInternalFlat + smLevel * SKELETON_MASTERY_FLAT_PER_LEVEL;
 
-        int levelsAbovePercentBase = rsLevel - PERCENT_SCALING_BASE_LEVEL;
+        // Pod 4. úrovní procentuální bonusy NEROSTOU - drží se na nule, nesnižují se.
+        // Bez toho clampu vyjde na rsLevel 1-2 záporný počet úrovní (1-3 = -2), z něj
+        // záporné dmg% i HP%, a výsledek je NIŽŠÍ než holé staty monstra.
+        // Python reference to řeší strážcem "0.0 if rs_lvl < 4 else (rs_lvl - 3) * par"
+        // na obou místech zvlášť (raise_skeleton.py, řádky 48 a 129); tady stačí jednou,
+        // protože damageMultiplier i hp z téhle proměnné oba vycházejí.
+        // Pro rsLevel == 3 dává obojí shodně 0, takže je to přesná ekvivalence.
+        int levelsAbovePercentBase = Math.max(0, rsLevel - PERCENT_SCALING_BASE_LEVEL);
         double damageMultiplier = 1.0 + (levelsAbovePercentBase * DAMAGE_PERCENT_PER_LEVEL) / 100.0;
 
         int hp = (int) Math.floor(

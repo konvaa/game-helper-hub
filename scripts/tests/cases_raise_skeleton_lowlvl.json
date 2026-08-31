@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "schema": "summon_cases.v1",
+    "skill": "raise_skeleton",
+    "notes": "KANDIDATNI sada pro nizke urovne (rs 1-3), pasmo strazce 'lvl < 4'. NENI soucasti overene sady baseline_raise_skeleton.json a nesmi tam byt slouceno, dokud Libor nepotvrdi hp a count z in-game tooltipu. Damage (3-4 pri rs=1/sm=1) uz potvrzeny je. Duvod vzniku: Java port mel v teto vetvi chybu, kterou zadny z 8 overenych pripadu nezachytil - nejnizsi z nich je rs=5."
+  },
+  "cases": [
+    { "id": "rs01_sm01_hell", "rs": 1, "sm": 1, "difficulty": "hell" },
+    { "id": "rs02_sm01_hell", "rs": 2, "sm": 1, "difficulty": "hell" },
+    { "id": "rs03_sm01_hell", "rs": 3, "sm": 1, "difficulty": "hell" }
+  ]
+}

@@ -1,8 +1,8 @@
 # P1 — Spring Boot slice: plán
 
-**Stav dokumentu:** v8 — rozhodnutí v sekci 9, kroky 1–6 hotové.
+**Stav dokumentu:** v9 — rozhodnutí v sekci 9, kroky 1–7 hotové.
 Průběžné poznámky ke kódu: [`BACKEND_ZAPISNIK.md`](BACKEND_ZAPISNIK.md).
-**Datum:** 2026-08-30
+**Datum:** 2026-09-11
 **Rozsah:** podle `AUDIT_2026-08-28.md` sekce 5.4, osekaná varianta.
 
 ---
@@ -470,7 +470,7 @@ auditu 5.4 (osekaná varianta 25–35 h celkem).
 | 4 | **HOTOVO** — repozitáře (`SkillRepository`, `MonsterRepository`, `MonsterStatRepository`) + filtr/fulltext dotaz | `SkillRepositoryIT` (`-Pit`, viz 7.4) zelený, 8/8 |
 | 5 | **HOTOVO** — DTO, mappery, controllery, `@RestControllerAdvice` | tři GET endpointy vrací JSON, `SkillControllerTest` zelený |
 | 6 | **HOTOVO** — `Seg5` + `RaiseSkeletonCalculator` + parametrizovaný test, `POST /api/summons/raise-skeleton/compute`, strukturované validační chyby v `ApiExceptionHandler` | `RaiseSkeletonCalculatorTest` 8/8 zelených, `mvn test` 47 / `-Pit` 55 |
-| 7 | springdoc, README, Dockerfile, plné compose | `docker compose up` → Swagger UI na `/swagger-ui` |
+| 7 | **HOTOVO** — springdoc (Swagger UI), `@Schema`/`@Tag`/`@Operation`, oba README, multi-stage `Dockerfile`, kompletní `docker-compose.yml` (`api` + `db`) | `docker compose up --build` naběhne, Swagger UI na `/swagger-ui/index.html`, `compute` vrací správná čísla |
 | 8 | *volitelně* Testcontainers IT, GitHub Actions, nasazení (Fly.io / Render) | odkaz do CV |
 
 **Kód píšu já, ty ho čteš, spouštíš a ptáš se.** Ke každému souboru dostaneš

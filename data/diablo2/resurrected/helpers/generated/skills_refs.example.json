@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "schema": "skills_refs.v1",
+    "source": "skills.txt"
+  },
+  "edges": {
+    "Fire Arrow": [
+      "Exploding Arrow"
+    ],
+    "Cold Arrow": [
+      "Ice Arrow"
+    ],
+    "Multiple Shot": [
+      "Guided Arrow"
+    ],
+    "Power Strike": [
+      "Charged Strike",
+      "Lightning Bolt",
+      "Lightning Strike"
+    ],
+    "Poison Javelin": [
+      "Plague Javelin"
+    ],
+    "Exploding Arrow": [
+      "Fire Arrow"
+    ],
+    "Lightning Bolt": [
+      "Charged Strike",
+      "Lightning Fury",
+      "Lightning Strike",
+      "Power Strike"
+    ],
+    "Ice Arrow": [
+      "Cold Arrow",
+      "Freezing Arrow"
+    ],
+    "Guided Arrow": [
+      "Multiple Shot"
+    ],
+    "Charged Strike": [
+      "Lightning Bolt",
+      "Lightning Strike",
+      "Power Strike"
+    ],
+    "Plague Javelin": [
+      "Poison Javelin"
+    ],
+    "Strafe": [
+      "Guided Arrow",
+      "Multiple Shot"
+    ]
+  },
+  "unresolved": {}
+}

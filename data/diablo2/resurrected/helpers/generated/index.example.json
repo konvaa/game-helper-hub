@@ -1,0 +1,19 @@
+{
+  "schema": "generated_index.v1",
+  "excel_dir": "<cesta k vlastnimu exportu D2R excel souboru>",
+  "cap": 60,
+  "files": [
+    "skills_raw.json",
+    "skilldesc_raw.json",
+    "missiles_raw.json",
+    "monsters_base.json",
+    "monlvl_ratios.json",
+    "pettype_raw.json",
+    "states_raw.json",
+    "itemstatcost_raw.json",
+    "skills_refs.json"
+  ],
+  "notes": [
+    "monsters_base now includes A2MinD/A2MaxD/A2TH fields (Attack2) from monstats to support summons like Fire Golem."
+  ]
+}

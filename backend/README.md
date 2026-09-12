@@ -7,8 +7,6 @@ odpovídá na otázku "kolik HP a damage bude mít můj vyvolaný kostlivec na
 
 Plán a zdůvodnění architektonických rozhodnutí:
 [`../docs/PLAN_P1_SPRING_SLICE.md`](../docs/PLAN_P1_SPRING_SLICE.md)
-Průběžné poznámky ke kódu, krok po kroku:
-[`../docs/BACKEND_ZAPISNIK.md`](../docs/BACKEND_ZAPISNIK.md)
 
 **Stav: krok 7 z 8** — kompletní P1 slice (jedna hra, jeden skill: Raise
 Skeleton), včetně dokumentovaného API a jednopříkazového spuštění v Dockeru.

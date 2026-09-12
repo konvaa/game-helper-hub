@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "note": "UI grouping only; datasets are global. Filter skills by class/group in UI."
+  },
+  "classes": {
+    "necromancer": {
+      "groups": {
+        "summons": [
+          "blood_golem",
+          "clay_golem",
+          "fire_golem",
+          "iron_golem",
+          "raise_skeletal_mage",
+          "raise_skeleton",
+          "revive"
+        ]
+      }
+    },
+    "druid": {
+      "groups": {
+        "summons": [
+          "heart_of_wolverine",
+          "oak_sage",
+          "poison_creeper",
+          "raven",
+          "spirit_of_barbs",
+          "summon_dire_wolf",
+          "summon_grizzly",
+          "summon_spirit_wolf"
+        ]
+      }
+    },
+    "assassin": {
+      "groups": {
+        "summons": [
+          "shadow_master",
+          "shadow_warrior"
+        ]
+      }
+    },
+    "amazon": {
+      "groups": {
+        "summons": [
+          "valkyrie"
+        ]
+      }
+    }
+  }
+}

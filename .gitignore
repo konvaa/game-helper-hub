@@ -33,3 +33,22 @@ mobile_app/build/
 
 # Pytest cache
 .pytest_cache/
+
+# --- Herní data a interní poznámky (nejsou součástí repozitáře) ---
+# Vyexportovaná herní data si každý vygeneruje ze své instalace hry
+# (scripts/rebuild_dataset.py). V repozitáři zůstávají jen ukázky
+# *.example.json, aby byla vidět struktura, kterou importér čte.
+# Trojice vzorů: ignorovat obsah, ale nechat gitu sestoupit do podadresářů
+# (bez `!data/**/` by se negace na soubory uvnitř neuplatnila) a pak
+# vyjmout ukázky.
+data/**
+!data/**/
+!data/**/*.example.json
+
+raw_sources/
+
+backend/src/main/resources/dataset/*.json
+!backend/src/main/resources/dataset/*.example.json
+
+# Interní pracovní deník — zůstává jen lokálně
+docs/BACKEND_ZAPISNIK.md

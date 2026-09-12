@@ -1,0 +1,620 @@
+{
+  "meta": {
+    "schema": "monsters_base.v1",
+    "source": "monstats.txt"
+  },
+  "monsters": {
+    "skeleton1": {
+      "id": "skeleton1",
+      "name_str": "Skeleton",
+      "base": {
+        "normal": {
+          "level": 2,
+          "min_hp": 86,
+          "max_hp": 129,
+          "ac": 84,
+          "a1_min_d": 34,
+          "a1_max_d": 101,
+          "a1_th": 101,
+          "a2_min_d": 34,
+          "a2_max_d": 101,
+          "a2_th": 101,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 37,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 68,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "skeleton2": {
+      "id": "skeleton2",
+      "name_str": "Returned",
+      "base": {
+        "normal": {
+          "level": 6,
+          "min_hp": 87,
+          "max_hp": 127,
+          "ac": 84,
+          "a1_min_d": 41,
+          "a1_max_d": 101,
+          "a1_th": 93,
+          "a2_min_d": 41,
+          "a2_max_d": 101,
+          "a2_th": 93,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 38,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 69,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "skeleton3": {
+      "id": "skeleton3",
+      "name_str": "BoneWarrior",
+      "base": {
+        "normal": {
+          "level": 7,
+          "min_hp": 89,
+          "max_hp": 124,
+          "ac": 84,
+          "a1_min_d": 41,
+          "a1_max_d": 121,
+          "a1_th": 94,
+          "a2_min_d": 41,
+          "a2_max_d": 121,
+          "a2_th": 94,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 39,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 85,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "skeleton4": {
+      "id": "skeleton4",
+      "name_str": "BurningDead",
+      "base": {
+        "normal": {
+          "level": 13,
+          "min_hp": 93,
+          "max_hp": 133,
+          "ac": 84,
+          "a1_min_d": 45,
+          "a1_max_d": 101,
+          "a1_th": 93,
+          "a2_min_d": 34,
+          "a2_max_d": 101,
+          "a2_th": 93,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 43,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 74,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 90,
+          "a1_th": 110,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "skeleton5": {
+      "id": "skeleton5",
+      "name_str": "Horror",
+      "base": {
+        "normal": {
+          "level": 14,
+          "min_hp": 94,
+          "max_hp": 131,
+          "ac": 84,
+          "a1_min_d": 41,
+          "a1_max_d": 101,
+          "a1_th": 94,
+          "a2_min_d": 31,
+          "a2_max_d": 101,
+          "a2_th": 94,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 44,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 105,
+          "a2_th": 125,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 78,
+          "min_hp": 70,
+          "max_hp": 100,
+          "ac": 100,
+          "a1_min_d": 40,
+          "a1_max_d": 100,
+          "a1_th": 120,
+          "a2_min_d": 40,
+          "a2_max_d": 95,
+          "a2_th": 115,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "zombie1": {
+      "id": "zombie1",
+      "name_str": "Zombie",
+      "base": {
+        "normal": {
+          "level": 1,
+          "min_hp": 101,
+          "max_hp": 181,
+          "ac": 84,
+          "a1_min_d": 51,
+          "a1_max_d": 151,
+          "a1_th": 101,
+          "a2_min_d": 101,
+          "a2_max_d": 151,
+          "a2_th": 101,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 36,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 60,
+          "a1_max_d": 140,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 67,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 60,
+          "a1_max_d": 140,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "zombie2": {
+      "id": "zombie2",
+      "name_str": "HungryDead",
+      "base": {
+        "normal": {
+          "level": 2,
+          "min_hp": 101,
+          "max_hp": 186,
+          "ac": 84,
+          "a1_min_d": 34,
+          "a1_max_d": 101,
+          "a1_th": 101,
+          "a2_min_d": 101,
+          "a2_max_d": 134,
+          "a2_th": 101,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 37,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 60,
+          "a1_max_d": 140,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 68,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 60,
+          "a1_max_d": 140,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "zombie3": {
+      "id": "zombie3",
+      "name_str": "Ghoul",
+      "base": {
+        "normal": {
+          "level": 12,
+          "min_hp": 108,
+          "max_hp": 197,
+          "ac": 84,
+          "a1_min_d": 51,
+          "a1_max_d": 138,
+          "a1_th": 93,
+          "a2_min_d": 113,
+          "a2_max_d": 163,
+          "a2_th": 93,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 43,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 60,
+          "a1_max_d": 140,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 73,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 60,
+          "a1_max_d": 140,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "zombie4": {
+      "id": "zombie4",
+      "name_str": "DrownedCarcass",
+      "base": {
+        "normal": {
+          "level": 22,
+          "min_hp": 107,
+          "max_hp": 192,
+          "ac": 85,
+          "a1_min_d": 51,
+          "a1_max_d": 136,
+          "a1_th": 94,
+          "a2_min_d": 108,
+          "a2_max_d": 165,
+          "a2_th": 94,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 50,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 60,
+          "a1_max_d": 140,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 80,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 55,
+          "a1_max_d": 135,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "zombie5": {
+      "id": "zombie5",
+      "name_str": "PlagueBearer",
+      "base": {
+        "normal": {
+          "level": 17,
+          "min_hp": 109,
+          "max_hp": 192,
+          "ac": 84,
+          "a1_min_d": 55,
+          "a1_max_d": 137,
+          "a1_th": 92,
+          "a2_min_d": 101,
+          "a2_max_d": 164,
+          "a2_th": 92,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 46,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 60,
+          "a1_max_d": 140,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 77,
+          "min_hp": 105,
+          "max_hp": 150,
+          "ac": 80,
+          "a1_min_d": 55,
+          "a1_max_d": 135,
+          "a1_th": 105,
+          "a2_min_d": 70,
+          "a2_max_d": 150,
+          "a2_th": 110,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "bighead1": {
+      "id": "bighead1",
+      "name_str": "Afflicted",
+      "base": {
+        "normal": {
+          "level": 12,
+          "min_hp": 66,
+          "max_hp": 127,
+          "ac": 63,
+          "a1_min_d": 76,
+          "a1_max_d": 113,
+          "a1_th": 77,
+          "a2_min_d": null,
+          "a2_max_d": null,
+          "a2_th": null,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 43,
+          "min_hp": 65,
+          "max_hp": 120,
+          "ac": 90,
+          "a1_min_d": 50,
+          "a1_max_d": 100,
+          "a1_th": 110,
+          "a2_min_d": null,
+          "a2_max_d": null,
+          "a2_th": null,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 73,
+          "min_hp": 65,
+          "max_hp": 120,
+          "ac": 90,
+          "a1_min_d": 50,
+          "a1_max_d": 100,
+          "a1_th": 110,
+          "a2_min_d": null,
+          "a2_max_d": null,
+          "a2_th": null,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    },
+    "bighead2": {
+      "id": "bighead2",
+      "name_str": "Tainted",
+      "base": {
+        "normal": {
+          "level": 11,
+          "min_hp": 67,
+          "max_hp": 130,
+          "ac": 63,
+          "a1_min_d": 63,
+          "a1_max_d": 101,
+          "a1_th": 74,
+          "a2_min_d": null,
+          "a2_max_d": null,
+          "a2_th": null,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "nightmare": {
+          "level": 42,
+          "min_hp": 65,
+          "max_hp": 120,
+          "ac": 90,
+          "a1_min_d": 50,
+          "a1_max_d": 100,
+          "a1_th": 110,
+          "a2_min_d": null,
+          "a2_max_d": null,
+          "a2_th": null,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        },
+        "hell": {
+          "level": 72,
+          "min_hp": 65,
+          "max_hp": 120,
+          "ac": 90,
+          "a1_min_d": 50,
+          "a1_max_d": 100,
+          "a1_th": 110,
+          "a2_min_d": null,
+          "a2_max_d": null,
+          "a2_th": null,
+          "s1_min_d": null,
+          "s1_max_d": null,
+          "s1_th": null
+        }
+      }
+    }
+  }
+}

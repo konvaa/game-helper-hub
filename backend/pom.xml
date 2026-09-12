@@ -41,8 +41,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!--
-          Krok 4, oprava profilu "-Pit" (viz BACKEND_ZAPISNIK.md, "Krok 4 -
-          oprava"). Vlastní property s hodnotou, kterou pak profil "it" níž
+          Krok 4, oprava profilu "-Pit". Vlastní property s hodnotou, kterou pak profil "it" níž
           jen PŘEPÍŠE - properties se v Mavenu mezi POM a aktivním profilem
           přepisují spolehlivě (na rozdíl od konfigurace pluginu, viz dál),
           takže je to bezpečnější místo pro přepínání "zapnuto/vypnuto" než
@@ -112,8 +111,7 @@
           NE 3.x/4.x řada (ta cílí Spring Boot 4, viz PLAN_P1_SPRING_SLICE.md
           sekce 3, "Proč 3.5, když aktuální hlavní řada je 4.1.1") - 2.8.17
           je nejnovější patch v řadě, která podporuje Spring Boot 3.5.x
-          (ověřeno na Maven Central, ne odhadem - viz BACKEND_ZAPISNIK.md,
-          "Krok 7").
+          (ověřeno na Maven Central, ne odhadem).
         -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -166,8 +164,8 @@
               (property výš), NE napevno "it" - profil "it" níž property
               přepíše na prázdnou. Původně jsem tu měl "it" napevno a profil
               se snažil přepsat rovnou <excludedGroups> v <configuration> -
-              to NEFUNGOVALO (viz BACKEND_ZAPISNIK.md, "Krok 4 - oprava"
-              pro přesný důvod), proto teď nepřímo přes property.
+              to NEFUNGOVALO (přesný důvod je u profilu "it" níž), proto
+              teď nepřímo přes property.
             -->
             <!--
               Krok 6: baseline_raise_skeleton.json (8 referenčních případů
@@ -175,10 +173,7 @@
               PLAN_P1_SPRING_SLICE.md sekce 7.3) žije v
               "scripts/tests/" - MIMO backend/ modul, protože je to
               společný soubor pro Python i Java stranu projektu (jediný
-              zdroj pravdy, ne dvě kopie, které se časem rozejdou - stejný
-              problém, který je zapsaný jako "otevřená otázka" v
-              BACKEND_ZAPISNIK.md pro CELÝ dataset, jen tady řešený hned
-              správně u JEDNOHO souboru, ať nevzniká druhý stejný případ).
+              zdroj pravdy, ne dvě kopie, které se časem rozejdou).
 
               Testovací classpath ale žádnou cestu "o úroveň výš" znát
               nesmí (rozbilo by se to v Dockeru/CI, kde backend/ může být
@@ -195,9 +190,10 @@
               "/baseline_raise_skeleton.json", ne v podadresáři.
 
               Vědomé omezení: tohle řeší jen TENHLE jeden testovací
-              soubor, ne celý duplicitní dataset (JSON v data/**/generated/
-              vs. backend/src/main/resources/dataset/) - to zůstává
-              otevřené do doby, kdy se bude řešit krok 7 (Docker build).
+              soubor. Samotný dataset se nekopíruje nikam - aplikace si ho
+              najde přes property game-helper.dataset.path (viz
+              application.yml a README.md), právě aby nemusel existovat
+              dvakrát.
             -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -247,8 +243,7 @@
           Přepisuje se PROPERTY (surefire.excludedGroups), ne přímo
           <configuration> pluginu. Zkoušel jsem to nejdřív přímo -
           <profile><build><plugins><plugin> se stejnou <configuration> a
-          prázdným <excludedGroups/> uvnitř - a NEFUNGOVALO to (ověřeno,
-          viz BACKEND_ZAPISNIK.md "Krok 4 - oprava"). Maven konfiguraci
+          prázdným <excludedGroups/> uvnitř - a NEFUNGOVALO to. Maven konfiguraci
           pluginu z profilu do hlavního <build> nepřepíše automaticky -
           když se stejný list existuje na obou místech, VYHRÁVÁ hlavní
           <build>, ne profil, a profilová hodnota se tiše zahodí (dalo by

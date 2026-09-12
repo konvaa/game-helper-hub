@@ -18,8 +18,8 @@ package cz.libor.gamehelper.summon;
  *
  * <p><b>Proč "seg5" a ne třeba jen "scalingFor"</b>: pojmenování drží stejné
  * jako v PLAN_P1_SPRING_SLICE.md a v Python referenci - je to schválně
- * stejné slovo napříč dokumentací, kódem a zápisníkem, ať se to při
- * pohovoru i při čtení kódu za měsíc dá dohledat jedním hledáním.
+ * stejné slovo napříč dokumentací i kódem, ať se to při pohovoru i při
+ * čtení kódu za měsíc dá dohledat jedním hledáním.
  *
  * <p>Vzorec (segment = interval úrovní, kde platí jeden koeficient):
  * <pre>

@@ -66,8 +66,8 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
      *
      * <p><b>{@code CAST(:q AS string)} NENÍ kosmetika - bez něj tenhle
      * dotaz na {@code q = null} padá</b> na {@code function lower(bytea)
-     * does not exist} (opraveno až po nahlášení, viz BACKEND_ZAPISNIK.md
-     * "Krok 4 - oprava CAST"). Parametr {@code :q} se jinde v dotazu
+     * does not exist} (opraveno až po nahlášení za běhu, ne při
+     * překladu). Parametr {@code :q} se jinde v dotazu
      * objevuje jen v {@code :q IS NULL} (typově neutrální srovnání) - na
      * rozdíl od {@code :charClass}, který má nezávisle na své hodnotě
      * jasný typ z {@code s.charClass = :charClass} (sloupec je

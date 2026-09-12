@@ -3,8 +3,8 @@
 Podklad pro relační schéma v P1 (Java/Spring Boot slice).
 **Toto je analýza, ne migrace** — žádný kód ani data se tímto dokumentem nemění.
 
-Datová základna: dataset z D2R 3.3 (`generated/index.json.excel_dir` →
-`F:\Apps\CascView\Work\D2R33\...`), 429 skillů × 322 sloupců.
+Datová základna: dataset z D2R 3.3 (lokální CascView export, cestu k němu
+drží `generated/index.json.excel_dir`), 429 skillů × 322 sloupců.
 
 ---
 

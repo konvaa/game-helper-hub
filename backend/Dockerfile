@@ -1,8 +1,6 @@
 # Krok 7 - PLAN_P1_SPRING_SLICE.md sekce 8, akceptační kritérium
 # "docker compose up" -> běží API i databáze bez mountování hostitelských
-# cest. Viz docs/BACKEND_ZAPISNIK.md, "Krok 7" pro plné zdůvodnění každého
-# rozhodnutí níž - tenhle soubor komentuje jen CO, ne PROČ (ty komentáře by
-# tu byly příliš dlouhé na čtení vedle sebe s příkazy).
+# cest.
 #
 # Multi-stage build: stage "build" má celý JDK + Maven a vyrobí fat jar;
 # finální image má jen JRE (bez kompilátoru, bez zdrojáků, bez Mavenu) a

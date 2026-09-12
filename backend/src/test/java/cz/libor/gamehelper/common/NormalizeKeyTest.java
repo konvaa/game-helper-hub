@@ -10,8 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * s Python {@code normalize_key()} - viz javadoc {@link NormalizeKey}.
  *
  * <p>Očekávané hodnoty nejsou vymyšlené - jsou to skutečné výstupy Python
- * implementace spuštěné nad konkrétními vstupy (viz
- * docs/BACKEND_ZAPISNIK.md, krok 3). Čistý JUnit test, žádný Spring kontext
+ * implementace spuštěné nad konkrétními vstupy. Čistý JUnit test, žádný Spring kontext
  * ani databáze - běží v milisekundách a je součástí "vždy zelené" sady
  * (viz {@code Seg5Test} a {@code RaiseSkeletonCalculatorTest} v kroku 6,
  * stejný princip).

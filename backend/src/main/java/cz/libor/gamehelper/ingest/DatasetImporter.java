@@ -17,6 +17,12 @@ import org.springframework.stereotype.Component;
  * než je aplikace "ready". Výjimka odtud aplikaci korektně shodí (exit kód
  * != 0), místo aby doběhla do částečně nekonzistentního stavu.
  *
+ * <p><b>Pozor, co JE a co NENÍ výjimka.</b> Chybějící dataset výjimku
+ * nevyhodí - {@link DatasetImportService#importIfNeeded()} import jen
+ * přeskočí s WARN hláškou a aplikace naběhne nad prázdnou databází (proč,
+ * viz javadoc té metody a třídy). Shodit start smí až dataset, který
+ * existuje, ale nedá se zpracovat.
+ *
  * <p>Tahle třída je záměrně tenká - žádná {@code @Transactional} logika tu
  * není. Důvod je v {@link DatasetImportService#importIfNeeded()} javadocu:
  * transakční metoda musí být volaná z JINÉHO beanu, aby se uplatnila

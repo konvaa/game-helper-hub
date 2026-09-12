@@ -24,9 +24,11 @@ import org.springframework.data.domain.Sort;
  * repo naklonuje (třeba náborář), nesmí dostat červený build jen proto, že
  * nemá spuštěnou databázi. {@code pom.xml} proto defaultně vylučuje testy
  * se štítkem {@code it} a spustí se jen přes {@code mvnw test -Pit} - kdy
- * MUSÍ běžet {@code docker compose up -d db} s daty naimportovanými
- * v kroku 3. Podrobnosti (a jedna past, do které jsem skoro spadl s
- * pojmenováním třídy) jsou v BACKEND_ZAPISNIK.md, krok 4.
+ * MUSÍ běžet {@code docker compose up -d db} s naimportovaným datasetem
+ * (jak ho dodat, popisuje {@code backend/README.md}). Past při
+ * pojmenování třídy: Surefire soubory {@code *IT.java} ve výchozím
+ * nastavení VŮBEC nenačítá - proto má {@code pom.xml} explicitní
+ * {@code <includes>}, viz komentář u surefire pluginu tam.
  *
  * <p><b>Proč tenhle test míří na reálnou databázi z docker-compose, a ne na
  * Testcontainers</b> (jak sekce 7.2/7.4 plánu navrhovaly jako výchozí
@@ -77,7 +79,7 @@ class SkillRepositoryIT {
     void searchBezFiltruVratiVsechnySkilly() {
         var page = skillRepository.search(null, null, PageRequest.of(0, 500));
 
-        // 429 - přesně číslo ověřené importerem v kroku 3 (BACKEND_ZAPISNIK.md).
+        // 429 - počet skillů, které importer vloží z plného datasetu D2R 3.3.
         assertThat(page.getTotalElements()).isEqualTo(429);
     }
 
@@ -137,8 +139,7 @@ class SkillRepositoryIT {
         // z docker-compose.yml (postgres:17-alpine) používá defaultně "C"
         // collation (ASCII pořadí bajtů) - velká písmena řadí PŘED malými,
         // na rozdíl od "přirozeného" řazení, které by dalo 'a' vedle 'A'.
-        // Ověřeno reálným dotazem proti Postgresu, ne jen odhadem z Pythonu
-        // - viz BACKEND_ZAPISNIK.md, krok 4.
+        // Ověřeno reálným dotazem proti Postgresu, ne jen odhadem z Pythonu.
         assertThat(page.getContent())
                 .extracting(Skill::getName)
                 .containsExactly("Abyss", "Amplify Damage", "AndrialSpray", "AndyPoisonBolt", "Apocalypse");

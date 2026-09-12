@@ -37,8 +37,7 @@ services:
   api:
     # Krok 7 - staví se přímo z backend/Dockerfile (kontext "." = backend/,
     # protože docker-compose.yml je v backend/). Viz Dockerfile pro detail
-    # multi-stage buildu; viz docs/BACKEND_ZAPISNIK.md, "Krok 7" pro
-    # zdůvodnění -DskipTests a ne-root uživatele v tom buildu.
+    # multi-stage buildu, včetně zdůvodnění -DskipTests a ne-root uživatele.
     build:
       context: .
       dockerfile: Dockerfile

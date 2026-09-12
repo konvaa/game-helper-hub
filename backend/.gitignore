@@ -6,3 +6,8 @@ target/
 
 # Maven Wrapper si stahuje distribuci Mavenu sem
 .mvn/wrapper/maven-wrapper.jar
+
+# Lokální override pro Compose - typicky mount vlastního datasetu (viz
+# README.md, krok 2b). Obsahuje cestu specifickou pro konkrétní stroj,
+# do repozitáře nepatří.
+docker-compose.override.yml

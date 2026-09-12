@@ -17,9 +17,9 @@ import jakarta.validation.constraints.Pattern;
  * a přemapuje na {@code 400} + {@code ProblemDetail} - BEZ jediného řádku
  * navíc v tomhle projektu (krok 5 ApiExceptionHandler žádnou vlastní
  * obsluhu validace nepsal, jen zdědil tu Spring Frameworku). Je to PRVNÍ
- * endpoint v projektu, který {@code @Valid} vůbec použije - přesné chování
- * (tvar JSON chybové odpovědi) zapisuje {@code docs/BACKEND_ZAPISNIK.md},
- * "Krok 6" po ověření.
+ * endpoint v projektu, který {@code @Valid} vůbec použije - přesný tvar
+ * JSON chybové odpovědi ukazuje {@code backend/README.md} (sekce
+ * "Co si vyzkoušet").
  *
  * <p><b>{@code @Min(1) @Max(99)}, NE {@code @Max(20)}:</b>
  * PLAN_P1_SPRING_SLICE.md sekce 5.1/{@code SKILLS_PROJECTION.md} 2.5 - 20 je

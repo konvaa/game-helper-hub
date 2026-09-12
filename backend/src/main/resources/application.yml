@@ -60,20 +60,34 @@ spring:
           batch_size: 100
 
 # Vlastni konfigurace aplikace (mimo Spring standard), viz
-# DatasetImportService. Dva plocha retezce - @Value je tu dostatecne,
+# DatasetImportService. Tri ploche retezce - @Value je tu porad dostatecne,
 # @ConfigurationProperties by pridavalo ceremonii (a novou zavislost na
 # spring-boot-configuration-processor pro IDE napovedu) bez skutecneho
-# prinosu pro dve hodnoty. Vyplati se to az kdyz konfiguracnich hodnot
-# pribude a/nebo budou mit vnorenou strukturu.
+# prinosu. Vyplati se to az kdyz konfiguracnich hodnot pribude vic a/nebo
+# budou mit vnorenou strukturu.
 game-helper:
   dataset:
+    # Adresar s vygenerovanym datasetem (skills_raw.json, monsters_base.json,
+    # index.json). PRAZDNO = vychozi chovani: soubory se hledaji na
+    # classpath v dataset/ (tedy uvnitr jaru).
+    #
+    # Herni data D2R nejsou soucasti repozitare, takze po cerstvem klonu je
+    # tahle hodnota prazdna a na classpath zadny dataset neni - aplikace
+    # nastartuje a endpointy vraci prazdne vysledky. Jak si dataset vyrobit
+    # a nasmerovat sem, popisuje README.md v teto slozce.
+    #
+    # Prepsani promennou prostredi (bez editace tohoto souboru):
+    #   GAME_HELPER_DATASET_PATH=/cesta/k/datasetu
+    # Pouzity je stejny zapis ${PROMENNA:vychozi} jako u datasource vyse -
+    # Spring by env promennou nasel i bez toho (relaxed binding), ale takhle
+    # je primo v konfiguraku videt, ze se to takhle da prepsat.
+    path: ${GAME_HELPER_DATASET_PATH:}
     # Musi odpovidat game.code vlozenemu ve V1 migraci.
     game-code: d2r
     # Rucne udrzovana hodnota - index.json v datasetu nema pole s verzi
-    # hry, jen excel_dir (cestu k CascView exportu). Kdyz Libor priste
-    # obnovi dataset (docs/PROJECT_OVERVIEW.md, "Jak prigenerovat
-    # dataset"), zmeni se tahle hodnota rucne spolu s prekopirovanim JSON
-    # souboru do src/main/resources/dataset/.
+    # hry, jen excel_dir (cestu k CascView exportu). Pri obnove datasetu
+    # (docs/PROJECT_OVERVIEW.md, "Jak prigenerovat dataset") se tahle
+    # hodnota meni rucne.
     source-version: "D2R 3.3"
 
 server:

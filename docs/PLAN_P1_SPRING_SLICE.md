@@ -1,7 +1,6 @@
 # P1 — Spring Boot slice: plán
 
 **Stav dokumentu:** v9 — rozhodnutí v sekci 9, kroky 1–7 hotové.
-Průběžné poznámky ke kódu: [`BACKEND_ZAPISNIK.md`](BACKEND_ZAPISNIK.md).
 **Datum:** 2026-09-11
 **Rozsah:** podle `AUDIT_2026-08-28.md` sekce 5.4, osekaná varianta.
 
@@ -24,7 +23,7 @@ Než se pustíme do plánu, tři věci, které jsem ověřil a které je potřeb
 
 | prostředí | java | javac | maven | docker | Maven Central |
 |---|---|---|---|---|---|
-| Cowork Linux VM (má připojenou složku `F:\Projekty\Game Helper`) | JRE | **ne** | **ne** | **ne** | **blokované (403)** |
+| Cowork Linux VM (má připojenou složku s repozitářem) | JRE | **ne** | **ne** | **ne** | **blokované (403)** |
 | Cowork cloud kontejner (nevidí tvoje soubory) | JDK 21 | ano | 3.9.11 | ano | **blokované (403)** |
 
 Důsledek, se kterým je potřeba počítat: **kód, který napíšu, je do tvého
@@ -122,7 +121,7 @@ moderních Spring kódů.
 
 ### 2.3 Kam v repozitáři
 
-Rozhodnuto: **`backend/`** v současném repozitáři (`F:\Projekty\Game Helper\backend\`).
+Rozhodnuto: **`backend/`** v současném repozitáři, podadresář `backend/`.
 
 Kořen repa už drží Python projekt (`conftest.py`, `requirements.txt`,
 `scripts/`); Maven projekt v kořeni by byl zmatek.
@@ -215,7 +214,7 @@ idiomatická kombinace: Flyway vlastní schéma, Hibernate hlídá shodu.
 Z projekce v `SKILLS_PROJECTION.md` (`skill` 26 sloupců + `skill_param`,
 `skill_calc`, `skill_calc_ref`, `skill_stat_ref`) potřebuje slice tohle:
 
-**Rozdělení do migrací** (viz `BACKEND_ZAPISNIK.md`, krok 1): `V1` vzniklo
+**Rozdělení do migrací**: `V1` vzniklo
 už v kroku 1 a obsahuje jen `game` + `dataset_version`; zbytek přijde v `V2`
 v kroku 2. Důvod je pravidlo Flyway o kontrolních součtech — už aplikovaná
 migrace se needituje. Dohromady dávají „baseline" popsaný v téhle tabulce:
@@ -452,7 +451,8 @@ databáze z `docker compose up` (ta samá, co používáš na verifikaci od
 kroku 1), ne Testcontainers. Testcontainers zůstává v plánu pro krok 8 -
 až přibude víc IT testů, `-Pit` profil se dá přepnout na Testcontainers bez
 zásahu do testovacích tříd samotných, jen do konfigurace datového zdroje.
-Detaily v `BACKEND_ZAPISNIK.md`, krok 4.
+Detaily jsou v javadocu `SkillRepositoryIT` a v komentářích u Surefire
+pluginu v `backend/pom.xml`.
 
 ---
 

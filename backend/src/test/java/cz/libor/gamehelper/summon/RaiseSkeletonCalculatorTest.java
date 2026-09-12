@@ -48,8 +48,8 @@ import org.junit.jupiter.params.provider.MethodSource;
  *       vstupu {@code double}) - žádná odchylka přijata není.</li>
  * </ul>
  * Pro čísla, kde se opravdu dělí procenty ({@code hp}, {@code phys_min/max}),
- * je bezpečnost přesné shody bez zaokrouhlovací tolerance ověřená napřímo -
- * viz {@code docs/BACKEND_ZAPISNIK.md}, "Krok 6": pro všech 8 baseline
+ * je bezpečnost přesné shody bez zaokrouhlovací tolerance ověřená napřímo:
+ * pro všech 8 baseline
  * případů je desetinná část mezivýsledku PŘED {@code floor()} vzdálená od
  * celočíselné hranice nejméně o 0.01, což je o mnoho řádů víc, než jaká
  * chyba může vzniknout z {@code double} aritmetiky (~1e-15) - žádný z
@@ -122,8 +122,7 @@ class RaiseSkeletonCalculatorTest {
     /**
      * Zdroj dat pro {@code @MethodSource} - přečte baseline JSON z
      * classpath (tam ho při buildu zkopíruje {@code maven-resources-plugin},
-     * viz {@code pom.xml} a {@code docs/BACKEND_ZAPISNIK.md}, "Krok 6") a
-     * převede jeho 8 případů na argumenty testu.
+     * viz {@code pom.xml}) a převede jeho 8 případů na argumenty testu.
      *
      * <p>Soubor se čte z {@code /baseline_raise_skeleton.json} (kořen
      * classpath, ne podadresář) - {@code maven-resources-plugin} ho tam
@@ -135,8 +134,8 @@ class RaiseSkeletonCalculatorTest {
      * jsem {@link BaselineFile} napsal jen s {@code cases} - Jackson má
      * defaultně {@code FAIL_ON_UNKNOWN_PROPERTIES=true}, takže na neznámé
      * pole {@code meta} spadl s {@code UnrecognizedPropertyException} a test
-     * se vůbec nespustil (0 argumentů pro {@code @ParameterizedTest}, viz
-     * {@code docs/BACKEND_ZAPISNIK.md}, "Krok 6" - oprava). Dvě možné opravy:
+     * se vůbec nespustil (0 argumentů pro {@code @ParameterizedTest}).
+     * Dvě možné opravy:
      * (a) {@code @JsonIgnoreProperties(ignoreUnknown = true)} na
      * {@link BaselineFile} - Jackson by {@code meta} tiše přeskočil; (b)
      * {@code meta} taky namodelovat. Zvolil jsem (b), ze dvou důvodů:

@@ -13,7 +13,7 @@ package cz.libor.gamehelper.summon;
  * exportovaný jako hotové číslo - Python reference
  * ({@code scripts/summon_engine}) ho vyhodnocuje obecným interpretem
  * herních výrazů (ten, co v P1 slice záměrně NEPORTUJEME - viz
- * {@code docs/BACKEND_ZAPISNIK.md}, "co je mimo scope"). Pro JEDEN
+ * {@code docs/PLAN_P1_SPRING_SLICE.md}, rozsah slice). Pro JEDEN
  * konkrétní skill (Raise Skeleton) šlo vzorec ručně rozepsat do uzavřeného
  * tvaru - PLAN_P1_SPRING_SLICE.md sekce 1.3 ho odvozuje a rovnou ověřuje
  * proti referenčnímu případu {@code rs20_sm11}. Tahle třída je ten uzavřený
@@ -39,8 +39,9 @@ package cz.libor.gamehelper.summon;
  * {@code max_hp=42, a1_min_d=1, a1_max_d=2, ac=6, a1_th=6}) a
  * {@code skills_raw.json} (Raise Skeleton: {@code EMin=0},
  * {@code EMinLev1..5 = 0,1,2,3,4}) - všech 8 × 8 hodnot (6 finálních +
- * 2 extract) sedí přesně. Podrobnosti a přesný postup jsou v
- * {@code docs/BACKEND_ZAPISNIK.md}, "Krok 6".
+ * 2 extract) sedí přesně. Tentýž přepočet dělá při každém buildu
+ * {@code RaiseSkeletonCalculatorTest} proti
+ * {@code scripts/tests/baseline_raise_skeleton.json}.
  *
  * <ul>
  *   <li>{@code rsInternalFlat = seg5(rsLevel)} - čistě z koeficientů

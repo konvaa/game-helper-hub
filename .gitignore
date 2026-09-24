@@ -52,3 +52,12 @@ backend/src/main/resources/dataset/*.json
 
 # Interní pracovní deník — zůstává jen lokálně
 docs/BACKEND_ZAPISNIK.md
+
+# --- Doplněno 2026-09-24 ---
+# Varianty .env (.env.local, .env.production ...) jsou stejně tajné jako .env.
+# Vzor s placeholdery (.env.example) naopak do repozitáře patří.
+.env.*
+!.env.example
+
+# Logy obecně (dosud jen JVM crash dumpy výš).
+*.log

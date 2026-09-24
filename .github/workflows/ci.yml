@@ -1,0 +1,49 @@
+# CI pro Spring Boot backend: při každém push a pull requestu přeloží
+# projekt a spustí testy ("mvnw verify" = compile + test + package).
+#
+# Proč takhle:
+# - Java 21 (Temurin): stejná verze jako <java.version> v backend/pom.xml
+#   a jako base image v backend/Dockerfile. Jiná verze by v CI mohla projít
+#   (nebo spadnout) jinak než lokálně.
+# - Maven Wrapper místo předinstalovaného "mvn" na runneru: wrapper si
+#   stáhne přesně tu verzi Mavenu, kterou má projekt v
+#   .mvn/wrapper/maven-wrapper.properties - CI a lokální build jedou stejně.
+# - Bez databáze: testy s @Tag("it") (SkillRepositoryIT) potřebují Postgres
+#   s naimportovaným datasetem, který v repu není, a pom.xml je ve výchozím
+#   stavu vylučuje. CI proto spouští totéž co "./mvnw test" na čistém stroji.
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Workflow jen čte kód; nic nepublikuje. Nejmenší oprávnění, jaká stačí.
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          # Cache ~/.m2 podle hashe pom.xml - opakované buildy nestahují
+          # závislosti znovu.
+          cache: maven
+          cache-dependency-path: backend/pom.xml
+
+      # mvnw je v gitu uložený bez spustitelného bitu (mode 100644), takže
+      # "./mvnw" by na Linuxu skončil "Permission denied". Stejně to řeší
+      # backend/Dockerfile ("chmod +x mvnw").
+      - run: chmod +x mvnw
+
+      - run: ./mvnw -B verify

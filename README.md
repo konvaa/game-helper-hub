@@ -1,5 +1,7 @@
 # Game Helper
 
+[![CI](https://github.com/konvaa/game-helper-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/konvaa/game-helper-hub/actions/workflows/ci.yml)
+
 Nástroj pro hráče Diablo II: Resurrected, který počítá odvozené staty
 herních mechanik (v první fázi **summony** — přivolaná stvoření: Raise
 Skeleton, Skeletal Mage, golemové, ...) na základě úrovně skillu a
@@ -13,8 +15,58 @@ Flyway, Docker). Flutter klient zatím nezačal. Python implementace ve
 ## Spring Boot API (aktuálně aktivní práce)
 
 **[`backend/`](backend/README.md)** — REST API nad daty D2R, portované
-z Python reference implementace, viz níže. Spustíš jedním příkazem
-(`docker compose up --build`), viz [`backend/README.md`](backend/README.md).
+z Python reference implementace, viz níže. Aktuálně umí výpočet statů
+summonu **Raise Skeleton** (`POST /api/summons/raise-skeleton/compute`)
+a čtení skillů a monster z datasetu.
+
+Technologie: Java 21, Spring Boot 3.5, Maven (přes Maven Wrapper,
+instalovat ho nemusíš), PostgreSQL 17 + Flyway, springdoc-openapi.
+
+### Jak to spustit lokálně
+
+Nejrychlejší cesta — potřebuješ jen [Docker
+Desktop](https://www.docker.com/products/docker-desktop/):
+
+```bash
+cd backend
+docker compose up --build
+```
+
+API poběží na <http://localhost:8080>. Bez herních dat nastartuje taky
+(endpointy vrací prázdné výsledky / `404`); jak si dataset vygenerovat
+z vlastní instalace hry a připojit, popisuje
+[`backend/README.md`](backend/README.md) (krok 2).
+
+Pro vývoj bez rebuildování image (vyžaduje JDK 21):
+
+```bash
+cd backend
+docker compose up -d db     # jen PostgreSQL
+./mvnw spring-boot:run      # Windows: mvnw.cmd spring-boot:run
+```
+
+Testy (nepotřebují databázi ani dataset — totéž spouští CI):
+
+```bash
+cd backend
+./mvnw test
+```
+
+> Na Linuxu/macOS může `./mvnw` hlásit `Permission denied` — soubor je
+> v gitu uložený bez spustitelného bitu. Pomůže `chmod +x mvnw` (stejně
+> to dělá `Dockerfile` i CI workflow).
+
+### Swagger UI
+
+Interaktivní dokumentace všech endpointů s tlačítkem „Try it out“:
+<http://localhost:8080/swagger-ui/index.html> (strojově čitelný OpenAPI
+popis je na <http://localhost:8080/v3/api-docs>).
+
+### CI
+
+[GitHub Actions](.github/workflows/ci.yml) při každém push a pull requestu
+přeloží backend a spustí testy (`./mvnw verify`, Java 21). Stav ukazuje
+odznak nahoře.
 
 ## Ostatní části repozitáře
 
